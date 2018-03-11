@@ -3,7 +3,7 @@
 
 class BaseConfig {
 public:
-	int bit_per_bucket, bucket_per_array, hash_num;
+    int bit_per_bucket, bucket_per_array, hash_num;
 };
 
 #endif

@@ -5,7 +5,7 @@
 
 class DummyDataset: public BaseDataset {
 public:
-	void init(const char* filepath);
+    void init(const char* filepath);
 };
 
 // implementation
