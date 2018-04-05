@@ -4,15 +4,14 @@
 #include "BaseTask.h"
 #include <cstdio>
 
-template <class Sketch, class Config, class Result, class Dataset>
-class DummyTask: public BaseTask<Sketch, Config, Dataset> {
+template <class Sketch, class Config, class Result, class Dataset, class DataConfig>
+class DummyTask: public BaseTask<Sketch, Config, Dataset, DataConfig> {
 private:
     Dataset dataset;
     Sketch sketch;
 public:
-    void init(Config& config, const char* datapath) {
-        sketch.init(config);
-        dataset.init(datapath);
+    bool init(Config& config1, DataConfig& config2) {
+        return sketch.init(config1) && dataset.init(config2);
     }
     void run() {
         sketch.insert("123", 3);

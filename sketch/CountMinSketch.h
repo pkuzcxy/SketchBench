@@ -12,7 +12,7 @@ private:
     Base* data[20];
     Hash hash[20];
 public:
-    void init(const Config& _config);
+    bool init(const Config& _config);
     void insert(const char* str, const unsigned int len);
     Base query(const char* str, const unsigned int len);
     ~CountMinSketch();
@@ -21,20 +21,21 @@ public:
 // implementation
 
 template<class Hash, class Config, class Base>
-void CountMinSketch<Hash, Config, Base>::init(const Config& _config) {
+bool CountMinSketch<Hash, Config, Base>::init(const Config& _config) {
     config = _config;
     if ((sizeof(Base) << 3) < config.bit_per_bucket) {
         printf("Base too small for bit per bucket\n");
-        return;
+        return false;
     }
     if (config.hash_num > 20) {
         printf("hash num too large\n");
-        return;
+        return false;
     }
     for (int i = 0; i < config.hash_num; ++i)
         hash[i].setSeed(i + 1000);
     for (int i = 0; i < config.hash_num; ++i)
         data[i] = new Base [config.bucket_per_array];
+    return true;
 }
 
 template<class Hash, class Config, class Base>

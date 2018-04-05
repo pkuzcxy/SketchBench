@@ -9,14 +9,14 @@ class DummySketch: public BaseSketch<int, void> {
 private:
     std::unordered_map<std::string, int> s;
 public:
-    void init();
+    bool init();
     void insert(const char* str, const unsigned int len);
     int query(const char* str, const unsigned int len);
 };
 
 // implementation
 
-void DummySketch::init() {}
+bool DummySketch::init() {}
 void DummySketch::insert(const char* str, const unsigned int len) {
     ++s[std::string(str, len)];
 }

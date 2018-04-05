@@ -3,13 +3,14 @@
 
 #include "BaseDataset.h"
 
-class DummyDataset: public BaseDataset {
+template<class Config>
+class DummyDataset: public BaseDataset<Config> {
 public:
-    void init(const char* filepath);
+    bool init(Config& config);
 };
 
 // implementation
 
-void DummyDataset::init(const char* filepath) {}
+bool DummyDataset::init(Config& config) {}
 
 #endif

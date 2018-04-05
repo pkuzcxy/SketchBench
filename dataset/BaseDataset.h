@@ -1,9 +1,10 @@
 #ifndef BASEDATASET_H
 #define BASEDATASET_H
 
+template <class Config>
 class BaseDataset {
 public:
-    virtual void init(const char* filepath) = 0;
+    virtual bool init(Config& config) = 0;
 };
 
 #endif
