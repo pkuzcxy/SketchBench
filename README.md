@@ -19,3 +19,14 @@
 * 为了相互独立，基本上每实现一个新的 class 除了引入基类的头文件不需要引入任何头文件（task 需要输出、文件操作的除外）。
 
 * 在所有文件中尽量不要 #define 或设置全局变量等，以免污染命名空间或是造成不必要的相互依赖。
+
+运行过程：
+
+```shell
+> ./converter file_in_int file_in_binary
+# 4 stands for bytesPerStr
+> ./data_analyzer 4 file_in_binary
+> ./freq file_in_binary > res.txt
+> ./res_analyzer < res.txt
+```
+
