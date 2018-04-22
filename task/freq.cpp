@@ -19,10 +19,10 @@ int main(int argc, char *argv[]) {
     }
 
     // sketches
-    CmSketch<BOBHash, int> cm(4, 16, 1000);
-    CsmSketch<BOBHash, int> csm(4, 16, 1000);
-    CSketch<BOBHash, int> cs(4, 16, 1000);
-    CuSketch<BOBHash, int> cu(4, 16, 1000);
+    CmSketch<BOBHash, int> cm(4, 16, 65536);
+    CsmSketch<BOBHash, int> csm(4, 16, 65536);
+    CSketch<BOBHash, int> cs(4, 16, 65536);
+    CuSketch<BOBHash, int> cu(4, 16, 65536);
 
     // Data Source
     const int bytesPerStr = 4;
