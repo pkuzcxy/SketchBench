@@ -38,7 +38,12 @@ def analyze(r, e):
 
 
 names, data = read_file(sys.argv[1])
+reses = []
 for i in range(1, len(names) + 1):
     res = analyze([dat[0] for dat in data], [dat[i] for dat in data])
     res['name'] = names[i-1]
-    print(res)
+    reses.append(res)
+
+import pickle
+with open(sys.argv[2], "wb") as f:
+    pickle.dump(reses, f)

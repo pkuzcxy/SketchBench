@@ -8,7 +8,7 @@ python3 utils/data_analyzer.py 4 test.dat
 g++ -std=c++11 task/freq.cpp
 ./a.out test.dat > res.txt
 # 分析结果
-python3 utils/res_analyzer.py res.txt
+python3 utils/res_analyzer.py res.txt res.pickle
 # 清理环境
 rm a.out
 rm test.dat

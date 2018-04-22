@@ -37,6 +37,9 @@ protected:
         }
     }
 public:
+    int MemUsageInBit() {
+        return hash_num * bit_per_counter * counter_per_array;
+    }
     SketchBase(int _hash_num, int _bit_per_counter, int _counter_per_array): hash_num(_hash_num), bit_per_counter(_bit_per_counter), counter_per_array(_counter_per_array) {
         if (checkParamLegal()) {
             allocMem();
