@@ -4,6 +4,7 @@
 python3 utils/data_gen.py 12285667 763206 0.5 4 test.dat
 # 分析数据集特征，画出表格
 python3 utils/data_analyzer.py 4 test.dat
+# python3 utils/data_analyzer.py 4 test.dat 1 可以去掉一个最高分
 # 编译、运行任务
 g++ -std=c++11 task/freq.cpp
 ./a.out test.dat > res.txt

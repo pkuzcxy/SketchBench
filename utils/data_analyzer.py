@@ -11,16 +11,23 @@ def file2dict(bytesNum, filePath):
         return s
 
 s = file2dict(int(sys.argv[1]), sys.argv[2])
+ss = [s[key] for key in s]
+ss.sort()
+if len(sys.argv) > 3:
+    rm = int(sys.argv[3])
+    ss = ss[:-rm]
+
 tot = 0
 maxFreq = 0
 minFreq = 100000
-uniq = len(s)
-for key in s:
-    tot += s[key]
-    maxFreq = max(maxFreq, s[key])
-    minFreq = min(minFreq, s[key])
+uniq = len(ss)
+for sss in ss:
+    tot += sss
+    maxFreq = max(maxFreq, sss)
+    minFreq = min(minFreq, sss)
+
 ax = plt.subplot(111)
-plt.hist([s[key] for key in s], 100)
+plt.hist(ss, 100)
 #print([s[key] for key in s])
 plt.xlabel('Freq')
 plt.ylabel('Num')
