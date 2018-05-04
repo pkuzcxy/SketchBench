@@ -4,8 +4,8 @@
 template<class Result, class Seed>
 class BaseHash {
 public:
-    virtual Result run(const char* str, unsigned int len) = 0;
-    virtual inline void setSeed(const Seed _seed) = 0;
+    virtual Result Run(const char* str, unsigned int len) = 0;
+    virtual inline void SetSeed(const Seed _seed) = 0;
 };
 
 #endif

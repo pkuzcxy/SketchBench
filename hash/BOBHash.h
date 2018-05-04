@@ -6,8 +6,8 @@
 class BOBHash: public BaseHash<unsigned int, unsigned int> {
 public:
     BOBHash(const unsigned int _seed = 1000);
-    unsigned int run(const char* str, unsigned int len);
-    inline void setSeed(const unsigned int _seed);
+    unsigned int Run(const char* str, unsigned int len);
+    inline void SetSeed(const unsigned int _seed);
 private:
     unsigned int seed;
     inline void mix(unsigned int& a, unsigned int& b, unsigned int& c);
@@ -17,7 +17,7 @@ private:
 
 // implementation
 
-unsigned int BOBHash::run(const char* str, unsigned int len) {
+unsigned int BOBHash::Run(const char* str, unsigned int len) {
     unsigned int a,b,c;
     a = b = 0x9e3779b9;
     c = prime[seed];
@@ -64,7 +64,7 @@ inline void BOBHash::mix(unsigned int& a, unsigned int& b, unsigned int& c) {
     c -= a; c -= b; c ^= (b>>15);
 }
 
-inline void BOBHash::setSeed(const unsigned int _seed) {
+inline void BOBHash::SetSeed(const unsigned int _seed) {
     seed = _seed;
 }
 
