@@ -15,11 +15,11 @@ dic = dict()
 for l in ls:
     for i in l:
         n = i['name']
-        aae = i['aae']
+        are = i['are']
         if n in dic:
-            dic[n].append(aae)
+            dic[n].append(are)
         else:
-            dic[n] = [aae]
+            dic[n] = [are]
 
 names = []
 for key in dic:

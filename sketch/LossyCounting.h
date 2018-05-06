@@ -24,7 +24,7 @@ public:
         total=0;
         bucket_num_cnt=0;
     }
-    void Insert(const char *str, const int len) {
+    Insert(const char *str, const int len) {
         if(data.find(str)!=data.end()){
             data[str].first++;
         }

@@ -45,7 +45,7 @@ public:
         }
     }
     ~SketchBase() {
-            delete []data;
+            delete data;
         }
     }
 };

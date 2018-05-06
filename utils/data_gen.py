@@ -2,11 +2,21 @@ import sys
 import os
 import random
 
+'''
+python3 utils/data_gen.py 12285667 763206 0.0 4 test1.dat
+'''
+'''
 tot = int(sys.argv[1])
 dis = int(sys.argv[2])
 skew = float(sys.argv[3])
 bytePerStr = int(sys.argv[4])
 filepath = sys.argv[5]
+'''
+tot = 12285667
+dis = 763206
+skew = 0.0
+bytePerStr = 4
+filepath = "Debugtest5.dat"
 
 def zipf(N, s):
     base = 0.0
