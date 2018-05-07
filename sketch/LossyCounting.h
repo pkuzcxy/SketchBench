@@ -14,29 +14,29 @@ private:
     double threshold;//查找下界
     double error;//允许的误差范围
     int bucket_num_cnt;//用于计算bucket编号
-    map<const char*,pair<Unit,Unit> > data;
+	std::map <const char*, std::pair<Unit,Unit> > data;
 public:
-    LossyCounting(int bucketsize,double thres,double err){
-        bucket_size=bucketsize;
-        threshold=thres;
+    LossyCounting(int size,double thre,double err){
+        bucket_size=size;
+        threshold=thre;
         error=err;
         bucket_id=1;
         total=0;
         bucket_num_cnt=0;
     }
-    Insert(const char *str, const int len) {
+    void Insert(const char *str, const int len) {
         if(data.find(str)!=data.end()){
             data[str].first++;
         }
         else{
-            pair<Unit,Unit> temp(1,bucket_id-1);
+            std::pair<Unit,Unit> temp(1,bucket_id-1);
             data[str]=temp;
         }
         bucket_num_cnt++;
         total++;
         //当前bucket满了，进入下一个bucket
         if(bucket_num_cnt>=bucket_size){
-            map<const char*,pair<Unit,Unit> >::iterator ii=data.begin();
+            auto ii=data.begin();
             while(ii!=data.end())
             {
                 if(ii->second.first+ii->second.second< bucket_id)
@@ -44,8 +44,8 @@ public:
                 else
                     ++ii;
             }
-            bucket_id++;
-            bucket_num_cnt=0;
+			bucket_id++;
+			bucket_num_cnt = 0;
         }
     }
     Unit Query(const char *str, const int len) {

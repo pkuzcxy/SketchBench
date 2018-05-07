@@ -15,17 +15,20 @@ dic = dict()
 for l in ls:
     for i in l:
         n = i['name']
-        are = i['are']
+        aae = i['aae']
         if n in dic:
-            dic[n].append(are)
+            dic[n].append(aae)
         else:
-            dic[n] = [are]
+            dic[n] = [aae]
 
 names = []
 for key in dic:
     plt.plot(x, dic[key])
     names.append(key)
 
+plt.title("Average Absolute Error")
+plt.xlabel("Skewness")
+plt.ylabel("AAE")
 plt.legend(names, loc='upper left')
 
 plt.show()

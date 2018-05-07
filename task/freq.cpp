@@ -5,6 +5,10 @@
 
 #include "../sketch/ASketch.h"
 #include "../sketch/Count-Mean-MinSketch.h"
+#include "../sketch/LossyCounting.h"
+#include "../sketch/Spectral Bloom Filter.h"
+
+
 
 #include "../dataset/StreamData.h"
 #include "../hash/BOBHash.h"
@@ -29,6 +33,9 @@ int main(int argc, char *argv[]) {
     CuSketch<BOBHash, int> cu(4, 16, 65536);
     ASketch<BOBHash,int> as(4,16,65536);
     CountMeanMinSketch<BOBHash, int> cmm(4,16,65536);
+    SpectralBloomFilter<BOBHash, int> sbf(4,16,65536*4);
+    LossyCounting<int> lc(4,4,4);
+    
     
     
     // Data Source
@@ -46,9 +53,9 @@ int main(int argc, char *argv[]) {
         cu.Insert(str, bytesPerStr);
         as.Insert(str, bytesPerStr);
         cmm.Insert(str, bytesPerStr);
-        
+        sbf.Insert(str, bytesPerStr);
     }
-    cout << "4\tcm\tcsm\tcs\tcu\ta\tcmm" << endl;
+    cout << "4\tcm\tcsm\tcs\tcu\ta\tcmm\tsbf" << endl;
     for (const auto& p: s) {
         cout << p.second << "\t";
         cout << cm.Query(p.first.c_str(), bytesPerStr) << "\t";
@@ -57,6 +64,7 @@ int main(int argc, char *argv[]) {
         cout << cu.Query(p.first.c_str(), bytesPerStr) << "\t";
         cout << as.Query(p.first.c_str(), bytesPerStr) << "\t";
         cout << cmm.Query(p.first.c_str(),bytesPerStr) << "\t";
+        cout << sbf.Query(p.first.c_str(), bytesPerStr) << "\t";
         cout << endl;
     }
     return 0;
