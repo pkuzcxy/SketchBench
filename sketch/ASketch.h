@@ -2,7 +2,7 @@
 #define A_SKETCH_H
 
 
-#define REDUCE (filterParameter+2*sizeof(Unit))*numStoredElephant_p/bit_per_counter/hash_num
+#define REDUCE (filterParameter+2*sizeof(Unit))*numStoredElephant_p*8/bit_per_counter/hash_num
 
 #include "SketchBase.h"
 

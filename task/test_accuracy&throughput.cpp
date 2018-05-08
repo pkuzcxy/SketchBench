@@ -35,7 +35,7 @@ void test(vector<string> & v,unordered_map<string, int> & item2freq, SketchBase<
     "_bitpercounter"+to_string(sketch.bit_per_counter)+\
     "_counterperarray"+to_string(sketch.counter_per_array);
     
-    throughput_file.open(throughput_file_name);
+    throughput_file.open("./result/"+throughput_file_name+".txt");
     throughput_file << "TotalNum\tTime" << endl;
     throughput_file << v.size() << "\t";
     throughput_file << double(finish-start)/CLOCKS_PER_SEC << "\t";
@@ -48,7 +48,7 @@ void test(vector<string> & v,unordered_map<string, int> & item2freq, SketchBase<
     "_hashnum"+to_string(sketch.hash_num)+\
     "_bitPerCounter"+to_string(sketch.bit_per_counter)+\
     "_counterPerArray"+to_string(sketch.counter_per_array);
-    frequency_file.open(frequency_file_name);
+    frequency_file.open("./result/"+frequency_file_name+".txt");
     frequency_file<<"exact\testimated"<<endl;
     for (const auto& p: item2freq) {
         frequency_file << p.second << "\t";
