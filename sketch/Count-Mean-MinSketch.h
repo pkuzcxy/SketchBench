@@ -7,7 +7,8 @@
 // if Unit is not 'unsigned', Query result can be negative
 
 template<class Hash, class Unit>
-class CountMeanMinSketch: public SketchBase<Hash, Unit> {
+class CountMeanMinSketch: public SketchBase<Hash, Unit>
+{
 private:
     using SketchBase<Hash, Unit>::hash_num;
     using SketchBase<Hash, Unit>::counter_per_array;
@@ -15,8 +16,10 @@ private:
     using SketchBase<Hash, Unit>::data;
     long long num_element;
 public:
+    using SketchBase<Hash, Unit>::sketch_name;
     CountMeanMinSketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array)
     {
+        strcpy(sketch_name,"cmmsketch");
         num_element=0;
     }
     void Insert(const char *str, const int len) {
@@ -35,8 +38,8 @@ public:
             noise=(num_element-temp)/(counter_per_array);
             estimate+=temp-noise;
         }
-        return estimate/hash_num;
+        int res = estimate/hash_num > 0 ?estimate/hash_num :0;
+        return res;
     }
 };
-
 #endif

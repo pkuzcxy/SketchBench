@@ -14,7 +14,11 @@ private:
     using SketchBase<Hash, Unit>::hash;
     using SketchBase<Hash, Unit>::data;
 public:
-    CmSketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array) {}
+    using SketchBase<Hash, Unit>::sketch_name;
+    CmSketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array)
+    {
+        strcpy(sketch_name,"cmsketch");
+    }
     void Insert(const char *str, const int len) {
         for (int i = 0; i < hash_num; ++i) {
             ++data[i][hash[i].Run(str, len) % counter_per_array];

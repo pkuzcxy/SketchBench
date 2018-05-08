@@ -2,13 +2,12 @@
 #define SKETCH_BASE_H
 
 #include <cstdio>
-
+#include <cstring>
 // bit_per_counter is ONLY for error checking
 
 template<class Hash, class Unit>
 class SketchBase {
 protected:
-    const int hash_num, bit_per_counter, counter_per_array;
     static const int MAX_HASH_NUM = 20;
     Unit *data[20];
     Hash hash[20];
@@ -37,6 +36,8 @@ protected:
         }
     }
 public:
+    const int hash_num, bit_per_counter, counter_per_array;
+    char sketch_name[50];
     int MemUsageInBit() {
         return hash_num * bit_per_counter * counter_per_array;
     }
@@ -51,7 +52,8 @@ public:
             delete [] data[i];
         }
     }
-    virtual void Insert(const char *str, int len) =0;
+    virtual void Insert(const char *str, int len) = 0;
+    virtual Unit Query(const char *str, const int len) = 0;
 };
 
 #endif

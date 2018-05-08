@@ -18,7 +18,11 @@ private:
     int acc = 0;
     Unit ave = 0;
 public:
-    CsmSketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array) {}
+    using SketchBase<Hash, Unit>::sketch_name;
+    CsmSketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array)
+    {
+        strcpy(sketch_name,"csmsketch");
+    }
     void Insert(const char *str, const int len) {
         int idx = rand() % hash_num;
         ++data[idx][hash[idx].Run(str, len) % counter_per_array];
@@ -30,6 +34,7 @@ public:
         for (int i = 0; i < hash_num; ++i) {
             res += data[i][hash[i].Run(str, len) % counter_per_array];
         }
+        res = res>0?res:0;
         return res;
     }
 };

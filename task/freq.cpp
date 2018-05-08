@@ -25,7 +25,11 @@ int main(int argc, char *argv[]) {
         cout << "Please input filepath" << endl;
         return -1;
     }
-
+    
+    
+    
+    
+    
     // sketches
     CmSketch<BOBHash, int> cm(4, 16, 65536);
     CsmSketch<BOBHash, int> csm(4, 16, 65536);
@@ -33,8 +37,7 @@ int main(int argc, char *argv[]) {
     CuSketch<BOBHash, int> cu(4, 16, 65536);
     ASketch<BOBHash,int> as(4,16,65536);
     CountMeanMinSketch<BOBHash, int> cmm(4,16,65536);
-    SpectralBloomFilter<BOBHash, int> sbf(4,16,65536*4);
-    LossyCounting<int> lc(4,4,4);
+    
     
     
     
@@ -53,7 +56,6 @@ int main(int argc, char *argv[]) {
         cu.Insert(str, bytesPerStr);
         as.Insert(str, bytesPerStr);
         cmm.Insert(str, bytesPerStr);
-        sbf.Insert(str, bytesPerStr);
     }
     cout << "4\tcm\tcsm\tcs\tcu\ta\tcmm\tsbf" << endl;
     for (const auto& p: s) {
@@ -64,7 +66,6 @@ int main(int argc, char *argv[]) {
         cout << cu.Query(p.first.c_str(), bytesPerStr) << "\t";
         cout << as.Query(p.first.c_str(), bytesPerStr) << "\t";
         cout << cmm.Query(p.first.c_str(),bytesPerStr) << "\t";
-        cout << sbf.Query(p.first.c_str(), bytesPerStr) << "\t";
         cout << endl;
     }
     return 0;

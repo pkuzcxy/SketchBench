@@ -16,10 +16,12 @@ private:
     Hash hash2[MAX_HASH_NUM];
     Unit queArr[MAX_HASH_NUM];
 public:
+    using SketchBase<Hash, Unit>::sketch_name;
     CSketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array) {
         for (int i = 0; i < hash_num; ++i) {
             hash2[i].SetSeed(i + 1000 + hash_num);
         }
+        strcpy(sketch_name,"csketch");
     }
     void Insert(const char *str, const int len) {
         for (int i = 0; i < hash_num; ++i) {
@@ -32,7 +34,9 @@ public:
             queArr[i] = ((hash2[i].Run(str, len) & 1) ? queArr[i] : -queArr[i]);
         }
         std::sort(queArr, queArr + hash_num);
-        return (queArr[hash_num>>1] + queArr[(hash_num-1)>>1]) >> 1;
+        int res =(queArr[hash_num>>1] + queArr[(hash_num-1)>>1]) >> 1;
+        res = res>0?res:0;
+        return res;
     }
 };
 

@@ -16,7 +16,11 @@ private:
     using SketchBase<Hash, Unit>::MAX_HASH_NUM;
     int hashIdx[MAX_HASH_NUM];
 public:
-    CuSketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array) {}
+    using SketchBase<Hash, Unit>::sketch_name;
+    CuSketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array)
+    {
+        strcpy(sketch_name,"cusketch");
+    }
     void Insert(const char *str, const int len) {
         hashIdx[0] = hash[0].Run(str, len) % counter_per_array;
         Unit sm = data[0][hashIdx[0]];

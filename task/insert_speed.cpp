@@ -3,15 +3,12 @@
 #include "../sketch/CsmSketch.h"
 #include "../sketch/CuSketch.h"
 #include "../sketch/SketchBase.h"
-
 #include "../sketch/ASketch.h"
 #include "../sketch/Count-Mean-MinSketch.h"
-
 #include "../dataset/StreamData.h"
 #include "../hash/BOBHash.h"
 
 #include <unordered_map>
-#include <string>
 #include <string>
 #include <iostream>
 #include <time.h>
@@ -28,6 +25,10 @@ double timing(vector<string> & v, SketchBase<BOBHash,int> &sketch,const int byte
     for(auto iter = v.begin();iter!=v.end();iter++)
         sketch.Insert(iter->c_str(), bytesPerStr);
     finish = clock();
+    
+    
+    
+    
     return double(finish-start)/CLOCKS_PER_SEC;;
 }
 int main(int argc, char *argv[]) {
@@ -37,6 +38,8 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     
+    
+    
     // sketches
     CmSketch<BOBHash, int> cm(4, 16, 65536);
     CsmSketch<BOBHash, int> csm(4, 16, 65536);
@@ -44,6 +47,9 @@ int main(int argc, char *argv[]) {
     CuSketch<BOBHash, int> cu(4, 16, 65536);
     ASketch<BOBHash,int> as(4,16,65536);
     CountMeanMinSketch<BOBHash, int> cmm(4,16,65536);
+    
+    
+    
     
     
     // Data Source

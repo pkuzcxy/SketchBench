@@ -1,6 +1,9 @@
 #ifndef A_SKETCH_H
 #define A_SKETCH_H
 
+
+#define REDUCE (filterParameter+2*sizeof(Unit))*numStoredElephant_p/bit_per_counter/hash_num
+
 #include "SketchBase.h"
 
 // this sketch would not check counter overflows
@@ -13,25 +16,30 @@ private:
     using SketchBase<Hash, Unit>::counter_per_array;
     using SketchBase<Hash, Unit>::hash;
     using SketchBase<Hash, Unit>::data;
+    int numStoredElephant;
     Unit *new_count;
     Unit *old_count;
-    char *item[32];
+    char **item;
 public:
-    ASketch(int hash_num, int bit_per_counter, int counter_per_array): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array)
+    using SketchBase<Hash, Unit>::sketch_name;
+    ASketch(int hash_num, int bit_per_counter, int counter_per_array,int filterParameter,int numStoredElephant_p): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array-REDUCE)
     {
-        new_count=new Unit[32];
-        old_count=new Unit[32];
-        memset(new_count,0,sizeof(Unit)*32);
-        memset(old_count,0,sizeof(Unit)*32);
-        for(int i=0;i<32;i++)
+        numStoredElephant = numStoredElephant_p;
+        strcpy(sketch_name,"asketch");
+        new_count=new Unit[numStoredElephant];
+        old_count=new Unit[numStoredElephant];
+        memset(new_count,0,sizeof(Unit)*numStoredElephant);
+        memset(old_count,0,sizeof(Unit)*numStoredElephant);
+        item = new char*[numStoredElephant];
+        for(int i=0;i<numStoredElephant;i++)
         {
-            item[i]=new char[100];
+            item[i]=new char[filterParameter+1];
             item[i][0]='\0';
         }
     }
     int find_element_in_filter(const char *str)
     {
-        for(int i=0;i<32;i++)
+        for(int i=0;i<numStoredElephant;i++)
         {
             if(strcmp(str,item[i])==0)
                 return  i;
@@ -40,7 +48,7 @@ public:
     }
     int find_empty_in_filter()
     {
-        for(int i=0;i<32;i++)
+        for(int i=0;i<numStoredElephant;i++)
         {
             if(strlen(item[i])==0)
                 return i;
@@ -111,7 +119,7 @@ public:
     {
         delete new_count;
         delete old_count;
-        for(int i=0;i<32;i++)
+        for(int i=0;i<numStoredElephant;i++)
         {
             delete item[i];
         }
