@@ -13,6 +13,7 @@ private:
     using SketchBase<Hash, Unit>::hash;
     using SketchBase<Hash, Unit>::data;
     using SketchBase<Hash, Unit>::MAX_HASH_NUM;
+    using SketchBase<Hash, Unit>::bit_per_counter;
     Hash hash2[MAX_HASH_NUM];
     Unit queArr[MAX_HASH_NUM];
 public:
@@ -36,6 +37,8 @@ public:
         std::sort(queArr, queArr + hash_num);
         int res =(queArr[hash_num>>1] + queArr[(hash_num-1)>>1]) >> 1;
         res = res>0?res:0;
+        unsigned int upbound = (1<<bit_per_counter) -1;
+        res = res>upbound ? upbound: res;
         return res;
     }
 };

@@ -12,6 +12,7 @@ private:
     using SketchBase<Hash, Unit>::hash_num;
     using SketchBase<Hash, Unit>::counter_per_array;
     using SketchBase<Hash, Unit>::hash;
+    using SketchBase<Hash, Unit>::bit_per_counter;
     using SketchBase<Hash, Unit>::data;
 public:
     using SketchBase<Hash, Unit>::sketch_name;
@@ -30,6 +31,8 @@ public:
             Unit t = data[i][hash[i].Run(str, len) % counter_per_array];
             res = res < t ? res : t;
         }
+        unsigned int upbound = (1<<bit_per_counter) -1;
+        res = res>upbound ? upbound: res;
         return res;
     }
 };

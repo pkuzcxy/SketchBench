@@ -52,6 +52,8 @@ public:
             delete [] data[i];
         }
     }
+ 
+    
     virtual void Insert(const char *str, int len) = 0;
     virtual Unit Query(const char *str, const int len) = 0;
 };

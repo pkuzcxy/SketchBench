@@ -14,6 +14,7 @@ private:
     using SketchBase<Hash, Unit>::counter_per_array;
     using SketchBase<Hash, Unit>::hash;
     using SketchBase<Hash, Unit>::data;
+    using SketchBase<Hash, Unit>::bit_per_counter;
     long long num_element;
 public:
     using SketchBase<Hash, Unit>::sketch_name;
@@ -38,7 +39,10 @@ public:
             noise=(num_element-temp)/(counter_per_array);
             estimate+=temp-noise;
         }
+        
         int res = estimate/hash_num > 0 ?estimate/hash_num :0;
+        unsigned int upbound = (1<<bit_per_counter) -1;
+        res = res>upbound ? upbound: res;
         return res;
     }
 };
