@@ -5,12 +5,14 @@
 #include "../sketch/SketchBase.h"
 #include "../sketch/ASketch.h"
 #include "../sketch/Count-Mean-MinSketch.h"
+#include "../sketch/Bloomfilter.h"
 #include "../dataset/StreamData.h"
 #include "../hash/BOBHash.h"
 
 #include <unordered_map>
 #include <algorithm>
 #include <map>
+#include <set>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -60,6 +62,8 @@ void test(vector<string> & v,unordered_map<string, int> & item2freq, SketchBase<
     }
     frequency_file.close();
 }
+
+
 class item
 {
 public :
@@ -160,9 +164,110 @@ void topk_test(vector<string> & v, SketchBase<BOBHash,int> &sketch,const int byt
     
     topk_file.close();
     
-    
-    
 }
+
+void multiset_test(vector<string> & v, SketchBase<BOBHash,int> &sketch,const int bytesPerStr,int k)
+{
+    
+    string sketch_name = sketch.sketch_name;
+    set<string> insertedItems;
+    
+    for(auto iter = v.begin();iter!=v.end();iter++)
+    {
+        
+        if(insertedItems.find(*iter) == insertedItems.end())
+        {
+            insertedItems.insert(*iter);
+            int insertTimes = item2idx[*iter]%k;
+            while (insertTimes--)
+                sketch.Insert(iter->c_str(), bytesPerStr);
+        }
+    }
+    
+    /*multiset test*/
+    ofstream multiset_file;
+    string multiset_file_name =  "multiset_"+sketch_name+\
+    +"_"+dataset+\
+    "_hashnum"+to_string(sketch.hash_num)+\
+    "_bitPerCounter"+to_string(sketch.bit_per_counter)+\
+    "_counterPerArray"+to_string(sketch.counter_per_array);
+    multiset_file.open("./result/"+multiset_file_name+".txt");
+    multiset_file<<"exact\ttrueSet\testimatedSet"<<endl;
+    
+    int i =0;
+    int trueCount = 0;
+    for (const auto& p: item2idx) {
+        multiset_file << p.second << "\t";
+        multiset_file << p.second%k << "\t";
+        multiset_file << sketch.Query(p.first.c_str(), bytesPerStr) << "\t";
+        multiset_file << endl;
+        i++;
+        if(p.second%k == sketch.Query(p.first.c_str(), bytesPerStr))
+            trueCount++;
+    }
+    cout<<i<<" "<<trueCount<<" "<<double(trueCount)/i<<endl;
+    multiset_file.close();
+}
+
+void BF_multiset_test(vector<string> & v,SketchBase<BOBHash,int> &sketch,const int bytesPerStr,int k)
+{
+    
+    string sketch_name = sketch.sketch_name;
+    set<string> insertedItems;
+    vector<BloomFilter<BOBHash,int> > bf_list;
+    for(int i =0;i<k;++i)
+    {
+        BloomFilter<BOBHash,int> bf(1,1,65536*4*16) ;
+        bf_list.push_back(bf);
+    }
+    for(auto iter = v.begin();iter!=v.end();iter++)
+    {
+        
+        if(insertedItems.find(*iter) == insertedItems.end())
+        {
+            insertedItems.insert(*iter);
+            int insertTimes = item2idx[*iter]%k;
+            bf_list[insertTimes].Insert(iter->c_str(), bytesPerStr);
+        }
+    }
+    /*multiset test*/
+    ofstream multiset_file;
+    string multiset_file_name =  "multiset_"+sketch_name+\
+    +"_"+dataset+\
+    "_hashnum"+to_string(sketch.hash_num)+\
+    "_bitPerCounter"+to_string(sketch.bit_per_counter)+\
+    "_counterPerArray"+to_string(sketch.counter_per_array);
+    multiset_file.open("./result/"+multiset_file_name+".txt");
+    multiset_file<<"exact\ttrueSet\testimatedSet"<<endl;
+    
+    int i =0;
+    int trueCount = 0;
+    for (const auto& p: item2idx) {
+        multiset_file << p.second << "\t";
+        multiset_file << p.second%k << "\t";
+        int queryRes = 0;
+        for (int i=0; i<k; ++i)
+        {
+            if(bf_list[i].Query((p.first).c_str(),bytesPerStr))
+               {
+                   queryRes = i;
+                   break;
+               }
+        }
+        multiset_file << queryRes << "\t";
+        multiset_file << endl;
+        i++;
+        if(p.second%k == queryRes)
+            trueCount++;
+    }
+    cout<<i<<" "<<trueCount<<" "<<double(trueCount)/i<<endl;
+    multiset_file.close();
+}
+
+
+
+
+
 int main(int argc, char *argv[]) {
     
     if (argc != 2) {
@@ -227,8 +332,11 @@ int main(int argc, char *argv[]) {
     test(v,item2freq,cmm,bytesPerStr);
      */
     
-    topk_test(v,cm,bytesPerStr,k);
+    //topk_test(v,cm,bytesPerStr,k);
     
+    //multiset_test(v,cm,bytesPerStr,k);
+    BloomFilter<BOBHash,int> bf(1,1,65536*4*16) ;
+    BF_multiset_test(v,bf,bytesPerStr,k);
     
     return 0;
 }

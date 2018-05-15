@@ -48,9 +48,11 @@ public:
         }
     }
     ~SketchBase() {
-        for (int i = 0; i < hash_num; ++i) {
+        
+        /*for (int i = 0; i < hash_num; ++i) {
             delete [] data[i];
         }
+        */
     }
  
     
