@@ -18,6 +18,7 @@
 #include <fstream>
 #include <time.h>
 #include <vector>
+#include <set>
 
 
 using namespace std;
@@ -266,8 +267,127 @@ void BF_multiset_test(vector<string> & v,SketchBase<BOBHash,int> &sketch,const i
 
 
 
+void generateTrueHeavyChange(vector<set<string> > & hc,vector<string> &v,int windowSize,double threshold)
+{
+    auto i = v.begin();
+    int j = 0;
+    int t  = threshold*windowSize; // threshold for heavy change
+    unordered_map<string, int> preWindow;
+    unordered_map<string, int> curWindow;
+    set<string> key;
+    bool firstWindow = true;
 
+    while (i != v.end())
+    {
+        curWindow[*i]++;
+        key.insert(*i);
+        j++;
+        if(j==windowSize)
+        {
+            if(firstWindow)
+            {
+                preWindow.swap(curWindow);
+                firstWindow = false;
+            }
+            else
+            {
+                set<string> temp_heavyChange;
+                for(const auto&p:key)
+                {
+                    int oldValue = preWindow.find(p)!=preWindow.end() ? preWindow[p]:0;
+                    int newValue = curWindow[p];
+                    int change = oldValue-newValue<0 ? newValue-oldValue : oldValue-newValue;
+                    if (change>t) {
+                        temp_heavyChange.insert(p);
+                    }
+                }
+                hc.push_back(temp_heavyChange);
+                preWindow.clear();
+                preWindow.swap(curWindow);
+            }
+            j = 0;
+        }
+        i++;
+    }
+    
+}
 
+void generateEstimateHeavyChange(vector<set<string> > & hc,vector<string> &v,SketchBase<BOBHash,int> &preSketch,SketchBase<BOBHash,int> &curSketch,const int bytesPerStr,int windowSize,double threshold)
+{
+    auto i = v.begin();
+    int j = 0;
+    int t  = threshold*windowSize; // threshold for heavy change
+    set<string> key;
+    bool firstWindow = true;
+    bool cur = false;
+    while (i != v.end())
+    {
+        if(cur)
+            curSketch.Insert(i->c_str(), bytesPerStr);
+        else
+            preSketch.Insert(i->c_str(), bytesPerStr);
+        key.insert(*i);
+        j++;
+        if(j==windowSize)
+        {
+            if(firstWindow)
+            {
+                firstWindow = false;
+                cur = !cur;
+            }
+            else
+            {
+                set<string> temp_heavyChange;
+                for(const auto&p:key)
+                {
+                    int preValue = preSketch.Query(p.c_str(),bytesPerStr);
+                    int curValue = curSketch.Query(p.c_str(),bytesPerStr);
+                    int change = curValue-preValue;
+                    change = change>0 ? change:-change;
+                    if (change>t) {
+                        temp_heavyChange.insert(p);
+                    }
+                }
+                hc.push_back(temp_heavyChange);
+                if (cur) preSketch.clear();
+                else curSketch.clear();
+                cur = !cur;
+            }
+            j = 0;
+        }
+        i++;
+    }
+}
+
+void heavyChangeResult(vector<set<string> > & trueRes,vector<set<string> > & estiRes,SketchBase<BOBHash,int> &sketch)
+{
+    string sketch_name = sketch.sketch_name;
+    ofstream heavyChange_file;
+    string heavyChange_file_name =  "heavyChange_"+sketch_name+\
+    +"_"+dataset+\
+    "_hashnum"+to_string(sketch.hash_num)+\
+    "_bitPerCounter"+to_string(sketch.bit_per_counter)+\
+    "_counterPerArray"+to_string(sketch.counter_per_array);
+    
+    heavyChange_file.open("./result/"+heavyChange_file_name+".txt");
+    
+    heavyChange_file<<"trueHeavyChange\ttrueReport\trecall\tfalseReport"<<endl;
+
+    int vLenth = trueRes.size();
+    cout<<vLenth<<endl;
+    for(int i =0;i<vLenth;++i)
+    {
+        int setLenth = estiRes[i].size();
+        int recall =  0;
+        for(const auto&p:estiRes[i])
+        {
+            if(trueRes[i].find(p) != trueRes[i].end())
+                recall++;
+        }
+        heavyChange_file<<trueRes[i].size()<<"\t"<<recall<<"\t"<<double(recall)/trueRes[i].size() \
+        <<"\t"<<estiRes[i].size()-recall<<endl;
+    }
+}
 int main(int argc, char *argv[]) {
     
     if (argc != 2) {
@@ -335,8 +455,22 @@ int main(int argc, char *argv[]) {
     //topk_test(v,cm,bytesPerStr,k);
     
     //multiset_test(v,cm,bytesPerStr,k);
+    
+    /*
     BloomFilter<BOBHash,int> bf(1,1,65536*4*16) ;
     BF_multiset_test(v,bf,bytesPerStr,k);
+    */
+    
+    
+    //heavychange_test
+
+    vector<set<string> > trueRes;
+    vector<set<string> > estiRes;
+    generateTrueHeavyChange(trueRes,v,500000,0.0002);
+    CmSketch<BOBHash, int> cm1(4, 16, 65536);
+    CmSketch<BOBHash, int> cm2(4, 16, 65536);
+    generateEstimateHeavyChange(estiRes,v,cm1,cm2,bytesPerStr,500000,0.0002);
+    heavyChangeResult(trueRes,estiRes,cm1);
     
     return 0;
 }

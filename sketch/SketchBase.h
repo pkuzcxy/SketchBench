@@ -35,6 +35,8 @@ protected:
             hash[i].SetSeed(i + 1000);
         }
     }
+    
+   
 public:
     const int hash_num, bit_per_counter, counter_per_array;
     char sketch_name[50];
@@ -54,8 +56,14 @@ public:
         }
         */
     }
- 
-    
+    void clear()
+    {
+        for (int i = 0; i < hash_num; ++i) {
+            for (int j = 0; j < counter_per_array; ++j) {
+                data[i][j] = 0;
+            }
+        }
+    }
     virtual void Insert(const char *str, int len) = 0;
     virtual Unit Query(const char *str, const int len) = 0;
 };
