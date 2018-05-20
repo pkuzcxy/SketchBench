@@ -481,51 +481,51 @@ int main(int argc, char *argv[]) {
 
     int p_hashnum,p_bitprecounter,p_counternum;
     //freq_test
-//    
-//    for(int i =4;i<=8;++i)
-//    {
-//        p_hashnum = i;
-//        p_bitprecounter = 16;
-//        p_counternum = 65536*4/i;
-//        CmSketch<BOBHash, int> cm(p_hashnum, p_bitprecounter, p_counternum);
-//        CsmSketch<BOBHash, int> csm(p_hashnum, p_bitprecounter, p_counternum);
-//        CSketch<BOBHash, int> cs(p_hashnum, p_bitprecounter, p_counternum);
-//        CuSketch<BOBHash, int> cu(p_hashnum, p_bitprecounter, p_counternum);
-//        /*ASketch_parameter: elephant item size,max num of items in filter */
-//        ASketch<BOBHash,int> as(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
-//        CountMeanMinSketch<BOBHash, int> cmm(p_hashnum, p_bitprecounter, p_counternum);
-//        test(v,item2freq,cm,bytesPerStr);
-//        test(v,item2freq,csm,bytesPerStr);
-//        test(v,item2freq,cs,bytesPerStr);
-//        test(v,item2freq,cu,bytesPerStr);
-//        test(v,item2freq,as,bytesPerStr);
-//        test(v,item2freq,cmm,bytesPerStr);
-//    }
-//    
-//    
-//    for(int i = 1;i<=5;++i)
-//    {
-//        p_hashnum = 4;
-//        p_bitprecounter = 16;
-//        p_counternum = 32768*i;
-//        CmSketch<BOBHash, int> cm(p_hashnum, p_bitprecounter, p_counternum);
-//        CsmSketch<BOBHash, int> csm(p_hashnum, p_bitprecounter, p_counternum);
-//        CSketch<BOBHash, int> cs(p_hashnum, p_bitprecounter, p_counternum);
-//        CuSketch<BOBHash, int> cu(p_hashnum, p_bitprecounter, p_counternum);
-//        /*ASketch_parameter: elephant item size,max num of items in filter */
-//        ASketch<BOBHash,int> as(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
-//        CountMeanMinSketch<BOBHash, int> cmm(p_hashnum, p_bitprecounter, p_counternum);
-//        test(v,item2freq,cm,bytesPerStr);
-//        test(v,item2freq,csm,bytesPerStr);
-//        test(v,item2freq,cs,bytesPerStr);
-//        test(v,item2freq,cu,bytesPerStr);
-//        test(v,item2freq,as,bytesPerStr);
-//        test(v,item2freq,cmm,bytesPerStr);
-//    }
-//
-//    //topk_test
-//    topk_test_spacesaving(v,bytesPerStr,k);
-//    
+    
+    for(int i =4;i<=8;++i)
+    {
+        p_hashnum = i;
+        p_bitprecounter = 16;
+        p_counternum = 65536*4/i;
+        CmSketch<BOBHash, int> cm(p_hashnum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm(p_hashnum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs(p_hashnum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu(p_hashnum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm(p_hashnum, p_bitprecounter, p_counternum);
+        test(v,item2freq,cm,bytesPerStr);
+        test(v,item2freq,csm,bytesPerStr);
+        test(v,item2freq,cs,bytesPerStr);
+        test(v,item2freq,cu,bytesPerStr);
+        test(v,item2freq,as,bytesPerStr);
+        test(v,item2freq,cmm,bytesPerStr);
+    }
+    
+    
+    for(int i = 1;i<=5;++i)
+    {
+        p_hashnum = 4;
+        p_bitprecounter = 16;
+        p_counternum = 32768*i;
+        CmSketch<BOBHash, int> cm(p_hashnum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm(p_hashnum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs(p_hashnum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu(p_hashnum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm(p_hashnum, p_bitprecounter, p_counternum);
+        test(v,item2freq,cm,bytesPerStr);
+        test(v,item2freq,csm,bytesPerStr);
+        test(v,item2freq,cs,bytesPerStr);
+        test(v,item2freq,cu,bytesPerStr);
+        test(v,item2freq,as,bytesPerStr);
+        test(v,item2freq,cmm,bytesPerStr);
+    }
+
+    //topk_test
+    topk_test_spacesaving(v,bytesPerStr,k);
+    
     
     for(int i =4;i<=8;++i)
     {
