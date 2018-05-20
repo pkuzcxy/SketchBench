@@ -72,7 +72,7 @@ public :
     string s;
     int freq;
 };
-bool comp(item & a,item & b)
+bool comp(const item & a,const item & b)
 {
     return a.freq>b.freq;
 }
@@ -157,8 +157,6 @@ void topk_test(vector<string> & v, SketchBase<BOBHash,int> &sketch,const int byt
     topk_file.open("./result/"+topk_file_name+".txt");
     topk_file<<"top"+to_string(k)<<endl;
     sort(myheap.begin(), myheap.end(),comp);
-    
-    
     for (auto HeapIter = myheap.begin();HeapIter!=myheap.end();HeapIter++)
     {
         topk_file << item2idx[HeapIter->s] <<"\t"<< HeapIter->freq<< endl;
