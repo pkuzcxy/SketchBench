@@ -7,7 +7,7 @@ private:
     const int m;
 public:
     SpaceSaving(const int _m): m(_m) {}
-    void Insert(char* str, const int len) {
+    void Insert(const char* str, const int len) {
         const std::string s(str, len);
         for (int i = (int)counter.size() - 1; i >= 0; --i) {
             if (counter[i].first == s) {

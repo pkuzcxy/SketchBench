@@ -6,6 +6,7 @@
 #include "../sketch/ASketch.h"
 #include "../sketch/Count-Mean-MinSketch.h"
 #include "../sketch/Bloomfilter.h"
+#include "../sketch/SpaceSaving.h"
 #include "../dataset/StreamData.h"
 #include "../hash/BOBHash.h"
 
@@ -166,6 +167,46 @@ void topk_test(vector<string> & v, SketchBase<BOBHash,int> &sketch,const int byt
     topk_file.close();
     
 }
+
+void topk_test_spacesaving(vector<string> & v,const int bytesPerStr,int k)
+{
+    vector<item>  myheap;
+    string sketch_name = "spaceSaving";
+    SpaceSaving ss(2*k);
+    /*topk test insertion*/
+    clock_t start,finish;
+    start = clock();
+    for(auto iter = v.begin();iter != v.end();iter++)
+    {
+        ss.Insert((*iter).c_str(),bytesPerStr);
+    }
+    
+    finish = clock();
+    ofstream throughput_file;
+    string throughput_file_name = "top"+to_string(k)+"_throughput_"+sketch_name+\
+    +"_"+dataset;
+    
+    throughput_file.open("./result/"+throughput_file_name+".txt");
+    throughput_file << "TotalNum\tTime" << endl;
+    throughput_file << v.size() << "\t";
+    throughput_file << double(finish-start)/CLOCKS_PER_SEC << "\t";
+    throughput_file.close();
+    
+    /*accuracy test*/
+    ofstream topk_file;
+    string topk_file_name =  "top"+to_string(k)+"_result_"+sketch_name+\
+    +"_"+dataset;
+    
+    topk_file.open("./result/"+topk_file_name+".txt");
+    topk_file<<"top"+to_string(k)<<endl;
+    
+    
+    vector<std::pair<std::string, int> > res = ss.TopK(k);
+    for(int i = 0;i<k;++i)
+        topk_file << item2idx[res[i].first] <<"\t"<< res[i].second<< endl;
+    topk_file.close();
+}
+
 
 void multiset_test(vector<string> & v, SketchBase<BOBHash,int> &sketch,const int bytesPerStr,int k)
 {
@@ -388,6 +429,15 @@ void heavyChangeResult(vector<set<string> > & trueRes,vector<set<string> > & est
         <<"\t"<<estiRes[i].size()-recall<<endl;
     }
 }
+
+void heavyChangeTest(SketchBase<BOBHash,int> &sketch1,SketchBase<BOBHash,int> &sketch2,vector<string> & v,int bytesPerStr)
+{
+    vector<set<string> > trueRes;
+    vector<set<string> > estiRes;
+    generateTrueHeavyChange(trueRes,v,1000000,0.0001);
+    generateEstimateHeavyChange(estiRes,v,sketch1,sketch2,bytesPerStr,1000000,0.0001);
+    heavyChangeResult(trueRes,estiRes,sketch1);
+}
 int main(int argc, char *argv[]) {
     
     if (argc != 2) {
@@ -424,53 +474,154 @@ int main(int argc, char *argv[]) {
     ofstream topk_exactRank_file;
     topk_exactRank_file.open("./result/topk_exactRank_"+dataset+".txt");
     topk_exactRank_file<<"id\tfreq"<<endl;
-    int k =100;
+    int k =1000;
     for(int i=0;i<k;i++)
         topk_exactRank_file<<item2idx[itemRank[i].s]<<"\t"<<itemRank[i].freq<<endl;
     topk_exactRank_file.close();
     
     
 
-    // sketches
-    CmSketch<BOBHash, int> cm(4, 16, 65536);
-    CsmSketch<BOBHash, int> csm(4, 16, 65536);
-    CSketch<BOBHash, int> cs(4, 16, 65536);
-    CuSketch<BOBHash, int> cu(4, 16, 65536);
+    int p_hashnum,p_bitprecounter,p_counternum;
+    //freq_test
+    for(int i =4;i<=8;++i)
+    {
+        p_hashnum = i;
+        p_bitprecounter = 16;
+        p_counternum = 65536*4/i;
+        CmSketch<BOBHash, int> cm(p_counternum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm(p_counternum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs(p_counternum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu(p_counternum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as(p_counternum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm(p_counternum, p_bitprecounter, p_counternum);
+        test(v,item2freq,cm,bytesPerStr);
+        test(v,item2freq,csm,bytesPerStr);
+        test(v,item2freq,cs,bytesPerStr);
+        test(v,item2freq,cu,bytesPerStr);
+        test(v,item2freq,as,bytesPerStr);
+        test(v,item2freq,cmm,bytesPerStr);
+    }
+    
+    
+    for(int i = 1;i<=5;++i)
+    {
+        p_hashnum = 4;
+        p_bitprecounter = 16;
+        p_counternum = 32768*i;
+        CmSketch<BOBHash, int> cm(p_counternum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm(p_counternum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs(p_counternum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu(p_counternum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as(p_counternum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm(p_counternum, p_bitprecounter, p_counternum);
+        test(v,item2freq,cm,bytesPerStr);
+        test(v,item2freq,csm,bytesPerStr);
+        test(v,item2freq,cs,bytesPerStr);
+        test(v,item2freq,cu,bytesPerStr);
+        test(v,item2freq,as,bytesPerStr);
+        test(v,item2freq,cmm,bytesPerStr);
+    }
 
-    /*ASketch_parameter: elephant item size,max num of items in filter */
-    ASketch<BOBHash,int> as(4,16,65536,bytesPerStr,128);
-    CountMeanMinSketch<BOBHash, int> cmm(4,16,65536);
+    //topk_test
+    topk_test_spacesaving(v,bytesPerStr,k);
+    for(int i =4;i<=8;++i)
+    {
+        p_hashnum = i;
+        p_bitprecounter = 16;
+        p_counternum = 65536*4/i;
+        CmSketch<BOBHash, int> cm(p_counternum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm(p_counternum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs(p_counternum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu(p_counternum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as(p_counternum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm(p_counternum, p_bitprecounter, p_counternum);
+        topk_test(v,cm,bytesPerStr,k);
+        topk_test(v,csm,bytesPerStr,k);
+        topk_test(v,cs,bytesPerStr,k);
+        topk_test(v,cu,bytesPerStr,k);
+        topk_test(v,as,bytesPerStr,k);
+        topk_test(v,cmm,bytesPerStr,k);
+    }
     
-    
-    //test
-    /*
-    test(v,item2freq,cm,bytesPerStr);
-    test(v,item2freq,csm,bytesPerStr);
-    test(v,item2freq,cs,bytesPerStr);
-    test(v,item2freq,cu,bytesPerStr);
-    test(v,item2freq,as,bytesPerStr);
-    test(v,item2freq,cmm,bytesPerStr);
-     */
-    
-    //topk_test(v,cm,bytesPerStr,k);
-    
-    //multiset_test(v,cm,bytesPerStr,k);
-    
-    /*
-    BloomFilter<BOBHash,int> bf(1,1,65536*4*16) ;
-    BF_multiset_test(v,bf,bytesPerStr,k);
-    */
-    
+    for(int i =1;i<=5;++i)
+    {
+        p_hashnum = 4;
+        p_bitprecounter = 16;
+        p_counternum = 32768*i;
+        CmSketch<BOBHash, int> cm(p_counternum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm(p_counternum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs(p_counternum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu(p_counternum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as(p_counternum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm(p_counternum, p_bitprecounter, p_counternum);
+        topk_test(v,cm,bytesPerStr,k);
+        topk_test(v,csm,bytesPerStr,k);
+        topk_test(v,cs,bytesPerStr,k);
+        topk_test(v,cu,bytesPerStr,k);
+        topk_test(v,as,bytesPerStr,k);
+        topk_test(v,cmm,bytesPerStr,k);
+    }
     
     //heavychange_test
-
-    vector<set<string> > trueRes;
-    vector<set<string> > estiRes;
-    generateTrueHeavyChange(trueRes,v,500000,0.0002);
-    CmSketch<BOBHash, int> cm1(4, 16, 65536);
-    CmSketch<BOBHash, int> cm2(4, 16, 65536);
-    generateEstimateHeavyChange(estiRes,v,cm1,cm2,bytesPerStr,500000,0.0002);
-    heavyChangeResult(trueRes,estiRes,cm1);
-    
+    for(int i =1;i<=5;++i)
+    {
+        p_hashnum = 4;
+        p_bitprecounter = 16;
+        p_counternum = 32768*i;
+        
+        
+        CmSketch<BOBHash, int> cm1(p_counternum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm1(p_counternum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs1(p_counternum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu1(p_counternum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as1(p_counternum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm1(p_counternum, p_bitprecounter, p_counternum);
+        CmSketch<BOBHash, int> cm2(p_counternum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm2(p_counternum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs2(p_counternum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu2(p_counternum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as2(p_counternum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm2(p_counternum, p_bitprecounter, p_counternum);
+        heavyChangeTest(cm1,cm2,v,bytesPerStr);
+        heavyChangeTest(csm1,csm2,v,bytesPerStr);
+        heavyChangeTest(cs1,cs2,v,bytesPerStr);
+        heavyChangeTest(cu1,cu2,v,bytesPerStr);
+        heavyChangeTest(as1,as2,v,bytesPerStr);
+        heavyChangeTest(cmm1,cmm2,v,bytesPerStr);
+    }
+    for(int i =4;i<=9;++i)
+    {
+        p_hashnum = i;
+        p_bitprecounter = 16;
+        p_counternum = 65536*4/i;
+        
+        
+        CmSketch<BOBHash, int> cm1(p_counternum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm1(p_counternum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs1(p_counternum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu1(p_counternum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as1(p_counternum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm1(p_counternum, p_bitprecounter, p_counternum);
+        CmSketch<BOBHash, int> cm2(p_counternum, p_bitprecounter, p_counternum);
+        CsmSketch<BOBHash, int> csm2(p_counternum, p_bitprecounter, p_counternum);
+        CSketch<BOBHash, int> cs2(p_counternum, p_bitprecounter, p_counternum);
+        CuSketch<BOBHash, int> cu2(p_counternum, p_bitprecounter, p_counternum);
+        /*ASketch_parameter: elephant item size,max num of items in filter */
+        ASketch<BOBHash,int> as2(p_counternum, p_bitprecounter, p_counternum,bytesPerStr,128);
+        CountMeanMinSketch<BOBHash, int> cmm2(p_counternum, p_bitprecounter, p_counternum);
+        heavyChangeTest(cm1,cm2,v,bytesPerStr);
+        heavyChangeTest(csm1,csm2,v,bytesPerStr);
+        heavyChangeTest(cs1,cs2,v,bytesPerStr);
+        heavyChangeTest(cu1,cu2,v,bytesPerStr);
+        heavyChangeTest(as1,as2,v,bytesPerStr);
+        heavyChangeTest(cmm1,cmm2,v,bytesPerStr);
+    }
     return 0;
 }
