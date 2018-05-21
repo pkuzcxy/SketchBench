@@ -27,7 +27,7 @@
 using namespace std;
 
 string dataset;
-void test(vector<string> & v,unordered_map<string, int> & item2freq, SketchBase<BOBHash,int> &sketch,const int bytesPerStr)
+void test(int idx,vector<string> & v,unordered_map<string, int> & item2freq, SketchBase<BOBHash,int> &sketch,const int bytesPerStr)
 {
     
     string sketch_name = sketch.sketch_name;
@@ -38,7 +38,7 @@ void test(vector<string> & v,unordered_map<string, int> & item2freq, SketchBase<
         sketch.Insert(iter->c_str(), bytesPerStr);
     finish = clock();
     ofstream throughput_file;
-    string throughput_file_name = "throughput_"+sketch_name+\
+    string throughput_file_name = "idx"+to_string(idx)+"_throughput_"+sketch_name+\
     +"_"+dataset+\
     "_hashnum"+to_string(sketch.hash_num)+\
     "_bitpercounter"+to_string(sketch.bit_per_counter)+\
@@ -440,10 +440,7 @@ void heavyChangeTest(SketchBase<BOBHash,int> &sketch1,SketchBase<BOBHash,int> &s
 }
 int main(int argc, char *argv[]) {
     
-    if (argc != 2) {
-        cout << "Please input filepath" << endl;
-        return -1;
-    }
+ 
     
     int lower = atoi(argv[2]);
     int upper = atoi(argv[3]);
@@ -491,6 +488,7 @@ int main(int argc, char *argv[]) {
     
     
     //freq_test
+    int fileidx = 1;
     int p_hashnum,p_bitprecounter,p_counternum;
     for(p_hashnum = 3;p_hashnum<=8;++p_hashnum)
     {
@@ -510,16 +508,17 @@ int main(int argc, char *argv[]) {
                 CountMeanMinSketch<BOBHash, int> cmm(p_hashnum, p_bitprecounter, p_counternum);
                 CMMCUSketch<BOBHash,int> cmmcu(p_hashnum,p_bitprecounter,p_counternum);
                 LossyCUSketch<BOBHash,int> LossyCU(p_hashnum,p_bitprecounter,p_counternum);
-                test(v,item2freq,cm,bytesPerStr);
-                test(v,item2freq,csm,bytesPerStr);
-                test(v,item2freq,cs,bytesPerStr);
-                test(v,item2freq,cu,bytesPerStr);
-                test(v,item2freq,as,bytesPerStr);
-                test(v,item2freq,cmm,bytesPerStr);
-                test(v,item2freq,cmmcu,bytesPerStr);
-                test(v,item2freq,LossyCU,bytesPerStr);
+                test(fileidx,v,item2freq,cm,bytesPerStr);
+                test(fileidx,v,item2freq,csm,bytesPerStr);
+                test(fileidx,v,item2freq,cs,bytesPerStr);
+                test(fileidx,v,item2freq,cu,bytesPerStr);
+                test(fileidx,v,item2freq,as,bytesPerStr);
+                test(fileidx,v,item2freq,cmm,bytesPerStr);
+                test(fileidx,v,item2freq,cmmcu,bytesPerStr);
+                test(fileidx,v,item2freq,LossyCU,bytesPerStr);
             //}
         //}
+        fileidx++;
     }
     
     
