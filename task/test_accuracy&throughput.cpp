@@ -7,6 +7,7 @@
 #include "../sketch/Count-Mean-MinSketch.h"
 #include "../sketch/CMMCUSketch.h"
 #include "../sketch/Bloomfilter.h"
+#include "../sketch/LossyCU.h"
 #include "../sketch/SpaceSaving.h"
 #include "../dataset/StreamData.h"
 #include "../hash/BOBHash.h"
@@ -497,6 +498,7 @@ int main(int argc, char *argv[]) {
                 ASketch<BOBHash,int> as(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
                 CountMeanMinSketch<BOBHash, int> cmm(p_hashnum, p_bitprecounter, p_counternum);
                 CMMCUSketch<BOBHash,int> cmmcu(p_hashnum,p_bitprecounter,p_counternum);
+                LossyCUSketch<BOBHash,int> LossyCU(p_hashnum,p_bitprecounter,p_counternum);
                 test(v,item2freq,cm,bytesPerStr);
                 test(v,item2freq,csm,bytesPerStr);
                 test(v,item2freq,cs,bytesPerStr);
@@ -504,6 +506,7 @@ int main(int argc, char *argv[]) {
                 test(v,item2freq,as,bytesPerStr);
                 test(v,item2freq,cmm,bytesPerStr);
                 test(v,item2freq,cmmcu,bytesPerStr);
+                test(v,item2freq,LossyCU,bytesPerStr);
             }
         }
     }

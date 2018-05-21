@@ -15,9 +15,11 @@ private:
 	using SketchBase<Hash, Unit>::data;
 	Unit *num_element;
 public:
+    using SketchBase<Hash, Unit>::sketch_name;
 	CMMCUSketch(int hash_num, int bit_per_counter, int counter_per_array) : SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array) {
 		num_element = new int[hash_num];
 		memset(num_element, 0, sizeof(int)*hash_num);
+        strcpy(sketch_name,"cmmcusketch");
 	}
 	~CMMCUSketch() {
 		delete num_element;
