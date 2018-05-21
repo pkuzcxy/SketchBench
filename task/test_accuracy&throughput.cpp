@@ -444,6 +444,16 @@ int main(int argc, char *argv[]) {
         cout << "Please input filepath" << endl;
         return -1;
     }
+    
+    int lower = atoi(argv[2]);
+    int upper = atoi(argv[3]);
+    
+    
+    
+    
+    
+    
+    
     // Data Source
     dataset = argv[1];
     const int bytesPerStr = 4;
@@ -484,11 +494,12 @@ int main(int argc, char *argv[]) {
     int p_hashnum,p_bitprecounter,p_counternum;
     for(p_hashnum = 3;p_hashnum<=8;++p_hashnum)
     {
-        for (p_bitprecounter = 16 ; p_bitprecounter<=32; p_bitprecounter+=8)
-        {
-            for (int i= 1; i <= 10; i++)
-            {
-                
+        //for (p_bitprecounter = 16 ; p_bitprecounter<=32; p_bitprecounter+=8)
+        //{
+            //for (int i= 1; i <= 10; i++)
+            //{
+        p_bitprecounter = lower;
+        int i = upper;
                 p_counternum = i*32768;
                 CmSketch<BOBHash, int> cm(p_hashnum, p_bitprecounter, p_counternum);
                 CsmSketch<BOBHash, int> csm(p_hashnum, p_bitprecounter, p_counternum);
@@ -507,8 +518,8 @@ int main(int argc, char *argv[]) {
                 test(v,item2freq,cmm,bytesPerStr);
                 test(v,item2freq,cmmcu,bytesPerStr);
                 test(v,item2freq,LossyCU,bytesPerStr);
-            }
-        }
+            //}
+        //}
     }
     
     
