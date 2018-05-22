@@ -5,7 +5,7 @@
 #define REDUCE (filterParameter+2*sizeof(Unit))*numStoredElephant_p*8/bit_per_counter/hash_num
 
 #include "SketchBase.h"
-
+#include <string.h>
 // this sketch would not check counter overflows
 // if Unit is not 'unsigned', Query result can be negative
 
@@ -18,12 +18,13 @@ private:
     using SketchBase<Hash, Unit>::data;
     using SketchBase<Hash, Unit>::bit_per_counter;
     int numStoredElephant;
+    int sz = 0;
     Unit *new_count;
     Unit *old_count;
     char **item;
 public:
     using SketchBase<Hash, Unit>::sketch_name;
-    ASketch(int hash_num, int bit_per_counter, int counter_per_array,int filterParameter,int numStoredElephant_p): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array-REDUCE)
+    ASketch(int hash_num, int bit_per_counter, int counter_per_array,int filterParameter,int numStoredElephant_p): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array)
     {
         numStoredElephant = numStoredElephant_p;
         strcpy(sketch_name,"asketch");
@@ -38,75 +39,70 @@ public:
             item[i][0]='\0';
         }
     }
-    int find_element_in_filter(const char *str)
+    int find_element_in_filter(const char* str, const int len)
     {
         for(int i=0;i<numStoredElephant;i++)
         {
-            if(strcmp(str,item[i])==0)
+            if(memcmp(str,item[i],len)==0)
                 return  i;
         }
         return -1;
     }
-    int find_empty_in_filter()
-    {
-        for(int i=0;i<numStoredElephant;i++)
-        {
-            if(strlen(item[i])==0)
-                return i;
+    int minpos() {
+        int res = 0, sm = new_count[0];
+        for (int i = 1; i < sz; ++i) {
+            if (new_count[i] < sm) {
+                sm = new_count[i];
+                res = i;
+            }
         }
-        return -1;
+        return res;
     }
     void Insert(const char *str, const int len) {
-        int index=find_element_in_filter(str);
-        //元素在filter中
-        if(index!=-1)
-        {
-            new_count[index]++;
+        int p = find_element_in_filter(str, len);
+        if (p != -1) {
+            ++new_count[p];
             return;
         }
-        //元素不在filter中，同时filter中还有空位
-        int index_empty=find_empty_in_filter();
-        if(index_empty!=-1)
+        if (sz<numStoredElephant)
         {
-            strcpy(item[index_empty],str);
-            new_count[index_empty]=1;
-            old_count[index_empty]=0;
+            memcpy(item[sz], str, len);
+            new_count[sz] = 1;
+            old_count[sz] = 0;
+            ++sz;
             return;
         }
-        ++data[0][hash[0].Run(str, len) % counter_per_array];
-        Unit estimate_freq=data[0][hash[0].Run(str, len) % counter_per_array];
-        //元素不在filter中，同时filter中没有空位，在sketch中操作
-        for (int i = 1; i < hash_num; ++i) {
+        for (int i = 0; i < hash_num; ++i) {
             ++data[i][hash[i].Run(str, len) % counter_per_array];
-            if(estimate_freq>data[i][hash[i].Run(str, len) % counter_per_array])
-                estimate_freq=data[i][hash[i].Run(str, len) % counter_per_array];
         }
-        int filter_min_index=0;//找到filter中最小的元组
-        Unit filter_min_freq=new_count[0];
-        for(int i=1;i<32;i++)
-        {
-            if(filter_min_freq>new_count[i])
-            {
-                filter_min_freq=new_count[i];
-                filter_min_index=i;
-            }
+        Unit res = data[0][hash[0].Run(str, len) % counter_per_array];
+        for (int i = 1; i < hash_num; ++i) {
+            Unit t = data[i][hash[i].Run(str, len) % counter_per_array];
+            res = res < t ? res : t;
         }
-        if(estimate_freq>filter_min_freq)
+        unsigned int upbound = (1<<bit_per_counter) -1;
+        res = res>upbound ? upbound: res;
+     
+        p = minpos();
+        if (res > new_count[p])
         {
-            Unit diff=new_count[filter_min_index]-old_count[filter_min_index];
-            if(diff>0)
+            if (new_count[p] > old_count[p])
             {
-                for(int i=0;i<hash_num;++i)
-                    data[i][hash[i].Run(str, len) % counter_per_array]+=diff;
-
+                for (int k = 0; k < new_count[p] - old_count[p]; ++k)
+                {
+                    for (int i = 0; i < hash_num; ++i)
+                    {
+                        ++data[i][hash[i].Run(str, len) % counter_per_array];
+                    }
+                }
             }
-            strcpy(item[filter_min_index],str);
-            new_count[filter_min_index]=estimate_freq;
-            old_count[filter_min_index]=estimate_freq;
+            memcpy(item[p], str, len);
+            new_count[p] = res;
+            old_count[p] = res;
         }
     }
     Unit Query(const char *str, const int len) {
-        int index = find_element_in_filter(str);
+        int index = find_element_in_filter(str,len);
         if(index!=-1)
             return new_count[index];
         Unit res=data[0][hash[0].Run(str, len) % counter_per_array];

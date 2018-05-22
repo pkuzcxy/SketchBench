@@ -11,9 +11,11 @@ class CMMCUSketch : public SketchBase<Hash, Unit> {
 private:
 	using SketchBase<Hash, Unit>::hash_num;
 	using SketchBase<Hash, Unit>::counter_per_array;
+    using SketchBase<Hash, Unit>::bit_per_counter;
 	using SketchBase<Hash, Unit>::hash;
 	using SketchBase<Hash, Unit>::data;
 	Unit *num_element;
+    Unit t[10];
 public:
     using SketchBase<Hash, Unit>::sketch_name;
 	CMMCUSketch(int hash_num, int bit_per_counter, int counter_per_array) : SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array) {
@@ -22,7 +24,7 @@ public:
         strcpy(sketch_name,"cmmcusketch");
 	}
 	~CMMCUSketch() {
-		delete num_element;
+		delete [] num_element;
 	}
 	void Insert(const char *str, const int len) {
 		Unit temp = data[0][hash[0].Run(str, len) % counter_per_array];
@@ -38,18 +40,23 @@ public:
 			}
 		}
 	}
-	Unit Query(const char *str, const int len) {
-		Unit temp, noise;
-		temp = data[0][hash[0].Run(str, len) % counter_per_array];
-		noise = (num_element[0] - temp) / (counter_per_array);
-		Unit estimate = temp - noise;
-		for (int i = 1; i < hash_num; ++i) {
-			temp = data[i][hash[i].Run(str, len) % counter_per_array];
-			noise = (num_element[i] - temp) / (counter_per_array - 1);
-			estimate += temp - noise;
-		}
-		return estimate / hash_num;
-	}
+    Unit Query(const char *str, const int len) {
+        Unit temp,noise;
+        temp = data[0][hash[0].Run(str, len) % counter_per_array];
+        noise=(num_element[0]-temp)/(counter_per_array-1);
+        t[0]=temp-noise;
+        for (int i = 1; i < hash_num; ++i) {
+            temp = data[i][hash[i].Run(str, len) % counter_per_array];
+            noise=(num_element[i]-temp)/(counter_per_array-1);
+            t[i]=temp-noise;
+        }
+        std::sort(t, t+hash_num);
+        int res = (t[hash_num>>1] + t[(hash_num-1)>>1])>>1;
+        int upbound = (1<<bit_per_counter) -1;
+        res = res>upbound ? upbound: res;
+            res = res<0?0:res;
+        return res;
+    }
 };
 
 #endif
