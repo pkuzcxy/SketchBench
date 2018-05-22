@@ -534,7 +534,7 @@ int main(int argc, char *argv[]) {
             {
                 for (double mem= 2*OneMegaBit; mem <= 4*OneMegaBit; mem+=OneMegaBit)
                 {
-                    p_counternum = mem/p_counternum/p_hashnum;
+                    p_counternum = mem/p_bitprecounter/p_hashnum;
                     CmSketch<BOBHash, int> cm(p_hashnum, p_bitprecounter, p_counternum);
                     CsmSketch<BOBHash, int> csm(p_hashnum, p_bitprecounter, p_counternum);
                     CSketch<BOBHash, int> cs(p_hashnum, p_bitprecounter, p_counternum);
@@ -571,7 +571,7 @@ int main(int argc, char *argv[]) {
         {
             for (double mem= 2*OneMegaBit; mem <= 4*OneMegaBit; mem+=OneMegaBit)
             {
-                p_counternum = mem/p_counternum/p_hashnum;
+                p_counternum = mem/p_bitprecounter/p_hashnum;
                 CmSketch<BOBHash, int> cm1(p_hashnum, p_bitprecounter, p_counternum);
                 CsmSketch<BOBHash, int> csm1(p_hashnum, p_bitprecounter, p_counternum);
                 CSketch<BOBHash, int> cs1(p_hashnum, p_bitprecounter, p_counternum);
