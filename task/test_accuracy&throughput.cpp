@@ -138,9 +138,7 @@ void topk_test(vector<string> & v, SketchBase<BOBHash,int> &sketch,const int byt
                     sketch.Insert(newitem.s.c_str(), bytesPerStr);
             }
         }
-        
     }
-        
     finish = clock();
     ofstream throughput_file;
     string throughput_file_name = "top"+to_string(k)+"_throughput_"+sketch_name+\
