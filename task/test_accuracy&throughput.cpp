@@ -567,7 +567,7 @@ int main(int argc, char *argv[]) {
         {
             for (double mem= 2*OneMegaBit; mem <= 4*OneMegaBit; mem+=OneMegaBit)
             {
-                p_counternum = mem/p_bitprecounter/p_hashnum;
+                p_counternum = mem/p_bitprecounter/p_hashnum/60;
                 CmSketch<BOBHash, int> cm1(p_hashnum, p_bitprecounter, p_counternum);
                 CsmSketch<BOBHash, int> csm1(p_hashnum, p_bitprecounter, p_counternum);
                 CSketch<BOBHash, int> cs1(p_hashnum, p_bitprecounter, p_counternum);
