@@ -438,8 +438,8 @@ void heavyChangeTest(SketchBase<BOBHash,int> &sketch1,SketchBase<BOBHash,int> &s
 {
     vector<set<string> > trueRes;
     vector<set<string> > estiRes;
-    generateTrueHeavyChange(trueRes,v,1000000,0.0001);
-    generateEstimateHeavyChange(estiRes,v,sketch1,sketch2,bytesPerStr,1000000,0.0001);
+    generateTrueHeavyChange(trueRes,v,100000,0.0005);
+    generateEstimateHeavyChange(estiRes,v,sketch1,sketch2,bytesPerStr,100000,0.0005);
     heavyChangeResult(trueRes,estiRes,sketch1);
 }
 int main(int argc, char *argv[]) {
