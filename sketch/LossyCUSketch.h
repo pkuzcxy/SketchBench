@@ -76,6 +76,20 @@ public:
 		for (int i = 0;i < bucket_size; ++i)
 			delete []item[i];
 	}
+    void clear()
+    {
+        for (int i = 0;i < bucket_size; ++i)
+            delete []item[i];
+        delete [] item;
+        bucket_id = 1;
+        total = 0;
+        bucket_num_cnt = 0;
+        item = (char **)malloc(size * sizeof(char *));
+        for (int i = 0;i < bucket_size; ++i) {
+            item[i] = new char[32];
+            item[i][0] = '\0';
+        }
+    }
 };
 
 #endif // LOSSYCOUNTINGSKETCH_H_INCLUDED

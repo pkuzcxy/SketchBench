@@ -48,5 +48,14 @@ public:
         res = res<0?0:res;
         return res;
     }
+    void clear()
+    {
+        for (int i = 0; i < hash_num; ++i) {
+            for (int j = 0; j < counter_per_array; ++j) {
+                data[i][j] = 0;
+            }
+        }
+        num_element = 0;
+    }
 };
 #endif

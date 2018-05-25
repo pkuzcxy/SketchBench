@@ -22,11 +22,13 @@ private:
     Unit *new_count;
     Unit *old_count;
     char **item;
+    int filterParameter_p;
 public:
     using SketchBase<Hash, Unit>::sketch_name;
     ASketch(int hash_num, int bit_per_counter, int counter_per_array,int filterParameter,int numStoredElephant_p): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array)
     {
         numStoredElephant = numStoredElephant_p;
+        filterParameter_p = filterParameter;
         strcpy(sketch_name,"asketch");
         new_count=new Unit[numStoredElephant];
         old_count=new Unit[numStoredElephant];
@@ -116,11 +118,39 @@ public:
     }
     ~ASketch()
     {
+        
         delete new_count;
         delete old_count;
         for(int i=0;i<numStoredElephant;i++)
         {
             delete item[i];
+        }
+        delete [] item;
+    }
+    void clear()
+    {
+        delete new_count;
+        delete old_count;
+        for(int i=0;i<numStoredElephant;i++)
+        {
+            delete item[i];
+        }
+        delete [] item;
+        new_count=new Unit[numStoredElephant];
+        old_count=new Unit[numStoredElephant];
+        memset(new_count,0,sizeof(Unit)*numStoredElephant);
+        memset(old_count,0,sizeof(Unit)*numStoredElephant);
+        item = new char*[numStoredElephant];
+        for(int i=0;i<numStoredElephant;i++)
+        {
+            item[i]=new char[filterParameter_p+1];
+            item[i][0]='\0';
+        }
+        sz = 0;
+        for (int i = 0; i < hash_num; ++i) {
+            for (int j = 0; j < counter_per_array; ++j) {
+                data[i][j] = 0;
+            }
         }
     }
 };

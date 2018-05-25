@@ -168,9 +168,8 @@ void topk_test(vector<string> & v, SketchBase<BOBHash,int> &sketch,const int byt
     {
         topk_file << item2idx[HeapIter->s] <<"\t"<< HeapIter->freq<< endl;
     }
-    
     topk_file.close();
-    
+
 }
 
 void topk_test_spacesaving(vector<string> & v,const int bytesPerStr,int k)
@@ -521,44 +520,43 @@ int main(int argc, char *argv[]) {
 
 
     //  topk_test
-    if(task ==2)
-    {
-        processidx= 1;
-        for(int i = 8;i<=4096;i<<=1)
-        {
-            k = i;
-            topk_test_spacesaving(v,bytesPerStr,k);
-            for(p_hashnum = 3;p_hashnum<=5;++p_hashnum)
-            {
-                for (double mem= 2*OneMegaBit; mem <= 4*OneMegaBit; mem+=OneMegaBit)
-                {
-                    p_counternum = mem/p_bitprecounter/p_hashnum;
-                    CmSketch<BOBHash, int> cm(p_hashnum, p_bitprecounter, p_counternum);
-                    CsmSketch<BOBHash, int> csm(p_hashnum, p_bitprecounter, p_counternum);
-                    CSketch<BOBHash, int> cs(p_hashnum, p_bitprecounter, p_counternum);
-                    CuSketch<BOBHash, int> cu(p_hashnum, p_bitprecounter, p_counternum);
-                    /*ASketch_parameter: elephant item size,max num of items in filter */
-                    ASketch<BOBHash,int> as(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
-                    CountMeanMinSketch<BOBHash, int> cmm(p_hashnum, p_bitprecounter, p_counternum);
-                    CMMCUSketch<BOBHash,int> cmmcu(p_hashnum,p_bitprecounter,p_counternum);
-                    LossyCUSketch<BOBHash,int> LossyCU(p_hashnum,p_bitprecounter,p_counternum);
-                    SpectralBloomFilterSketch<BOBHash,int> sbf(p_hashnum,p_bitprecounter,p_counternum);
-                    topk_test(v,cm,bytesPerStr,k);
-                    topk_test(v,csm,bytesPerStr,k);
-                    topk_test(v,cs,bytesPerStr,k);
-                    topk_test(v,cu,bytesPerStr,k);
-                    topk_test(v,as,bytesPerStr,k);
-                    topk_test(v,cmm,bytesPerStr,k);
-                    topk_test(v,cmmcu,bytesPerStr,k);
-                    topk_test(v,LossyCU,bytesPerStr,k);
-                    topk_test(v,sbf,bytesPerStr,k);
-                    cout<<"topk"<<processidx++<<endl;
-                }
-            }
-        }
-    }
-
-
+//    if(task ==2)
+//    {
+//        processidx= 1;
+//        for(int i = 8;i<=4096;i<<=1)
+//        {
+//            k = i;
+//            topk_test_spacesaving(v,bytesPerStr,k);
+//            for(p_hashnum = 3;p_hashnum<=5;++p_hashnum)
+//            {
+//                for (double mem= 2*OneMegaBit; mem <= 4*OneMegaBit; mem+=OneMegaBit)
+//                {
+//                    p_counternum = mem/p_bitprecounter/p_hashnum;
+//                    CmSketch<BOBHash, int> cm(p_hashnum, p_bitprecounter, p_counternum);
+//                    CsmSketch<BOBHash, int> csm(p_hashnum, p_bitprecounter, p_counternum);
+//                    CSketch<BOBHash, int> cs(p_hashnum, p_bitprecounter, p_counternum);
+//                    CuSketch<BOBHash, int> cu(p_hashnum, p_bitprecounter, p_counternum);
+//                    /*ASketch_parameter: elephant item size,max num of items in filter */
+//                    ASketch<BOBHash,int> as(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
+//                    CountMeanMinSketch<BOBHash, int> cmm(p_hashnum, p_bitprecounter, p_counternum);
+//                    CMMCUSketch<BOBHash,int> cmmcu(p_hashnum,p_bitprecounter,p_counternum);
+//                    LossyCUSketch<BOBHash,int> LossyCU(p_hashnum,p_bitprecounter,p_counternum);
+//                    SpectralBloomFilterSketch<BOBHash,int> sbf(p_hashnum,p_bitprecounter,p_counternum);
+//                    topk_test(v,cm,bytesPerStr,k);
+//                    topk_test(v,csm,bytesPerStr,k);
+//                    topk_test(v,cs,bytesPerStr,k);
+//                    topk_test(v,cu,bytesPerStr,k);
+//                    topk_test(v,as,bytesPerStr,k);
+//                    topk_test(v,cmm,bytesPerStr,k);
+//                    topk_test(v,cmmcu,bytesPerStr,k);
+//                    topk_test(v,LossyCU,bytesPerStr,k);
+//                    topk_test(v,sbf,bytesPerStr,k);
+//                    cout<<"topk"<<processidx++<<endl;
+//                }
+//            }
+//        }
+//    }
+//
 
     
 //   heavychange_test
@@ -602,6 +600,9 @@ int main(int argc, char *argv[]) {
                 heavyChangeTest(LossyCU1,LossyCU2,v,bytesPerStr);
                 heavyChangeTest(sbf1,sbf2,v,bytesPerStr);
                 cout<<"hc"<<processidx++<<endl;
+                
+                
+                
             }
         }
     }
