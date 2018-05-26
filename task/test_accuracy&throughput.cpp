@@ -433,12 +433,11 @@ void heavyChangeResult(vector<set<string> > & trueRes,vector<set<string> > & est
         <<"\t"<<estiRes[i].size()-recall<<endl;
     }
 }
-
+vector<set<string> > trueRes;
 void heavyChangeTest(SketchBase<BOBHash,int> &sketch1,SketchBase<BOBHash,int> &sketch2,vector<string> & v,int bytesPerStr)
 {
-    vector<set<string> > trueRes;
+    
     vector<set<string> > estiRes;
-    generateTrueHeavyChange(trueRes,v,100000,0.0005);
     generateEstimateHeavyChange(estiRes,v,sketch1,sketch2,bytesPerStr,100000,0.0005);
     heavyChangeResult(trueRes,estiRes,sketch1);
 }
@@ -560,6 +559,7 @@ int main(int argc, char *argv[]) {
 
     
 //   heavychange_test
+    generateTrueHeavyChange(trueRes,v,100000,0.0005);
     if(task ==3)
     {
         processidx = 1;
