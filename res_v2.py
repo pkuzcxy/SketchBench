@@ -317,9 +317,11 @@ def heavyChange_analyzer(env):
                                  "_counterPerArray"+env['counternum']
         names, data = read_file(os.path.join(env['path'], heavyChange_file_name+ '.txt'))
         for line in data:
-            recall += float(line[names.index('recall')])
-            precision += float(line[names.index('trueReport')]) / \
-                         (float(line[names.index('trueReport')])+float(line[names.index('falseReport')]))
+            if float(line[names.index('recall')]) !=float('-nan') and float(line[names.index('recall')]) !=float('nan')  :
+                recall += float(line[names.index('recall')])
+            if (float(line[names.index('trueReport')])+float(line[names.index('falseReport')])) > 0:
+                precision += float(line[names.index('trueReport')]) \
+                         / (float(line[names.index('trueReport')])+float(line[names.index('falseReport')]))
         res[sketch_name[i]]['recall'] = recall/len(data)
         res[sketch_name[i]]['precision'] = precision/len(data)
         print(sketch_name[i]+str(res[sketch_name[i]]['recall'])+"\n")

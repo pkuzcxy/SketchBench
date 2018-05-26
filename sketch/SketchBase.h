@@ -56,14 +56,7 @@ public:
         }
         */
     }
-    void clear()
-    {
-        for (int i = 0; i < hash_num; ++i) {
-            for (int j = 0; j < counter_per_array; ++j) {
-                data[i][j] = 0;
-            }
-        }
-    }
+    virtual void clear() = 0;
     virtual void Insert(const char *str, int len) = 0;
     virtual Unit Query(const char *str, const int len) = 0;
 };
