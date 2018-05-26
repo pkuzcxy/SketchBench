@@ -253,7 +253,7 @@ def topk_analyzer(env):
             rank2 = 0.0
             re =0.0
             ae = 0.0
-            if sketch_name[i]!='sbfsketch':
+            if sketch_name[i]=='sbfsketch':
                 topk_file_name ="top"+str(k)+"_result_"+sketch_name[i]+\
                                 "_"+env['dataset']+\
                                 "_hashnum"+env['hashnum']+\
