@@ -107,7 +107,15 @@ public:
             if(counter[i].first==s)
             {
                 counter[i].second += freq;
-                return;
+                break;
+            }
+        }
+        for (int i = (int)counter.size() - 1; i >= 0; --i)
+        {
+            if(counter[i].second<heapmin)
+            {
+                heapmin = counter[i].second;
+                minidx = i;
             }
         }
     }
