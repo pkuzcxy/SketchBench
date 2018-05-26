@@ -20,7 +20,7 @@ public:
     ass(int hash_num, int bit_per_counter, int counter_per_array,int _m): SketchBase<Hash, Unit>(hash_num, bit_per_counter, counter_per_array)
     {
         strcpy(sketch_name,"ass");
-         m = _m;
+        m = _m;
         heapmin = 1<< 20;
     }
     void Insert(const char* str, const int len)
@@ -68,7 +68,7 @@ public:
                 {
                     int tmp=zhou[i].second;
                     zhou.erase(zhou.begin()+i);
-                    InsertSpaveSaving(str,tmp);
+                    InsertSpaveSaving(s,tmp);
                 }
                 find = true;
                 return ;
@@ -108,19 +108,41 @@ public:
     }
     void InsertSpaveSaving(std::string s,int freq)
     {
-        assitem tmp =counter[minidx];
-        counter[minidx].first = s;
-        counter[minidx].second = freq;
-        heapmin = freq;
+        
+        bool find =false;
         for (int i = (int)counter.size() - 1; i >= 0; --i)
         {
-            if(counter[i].second<heapmin)
+            if(counter[i].first == s)
             {
-                heapmin = counter[i].second;
-                minidx = i;
+                counter[i].second += freq;
+                find =true;
+            }
+            heapmin =  counter[minidx].second;
+            for (int i = (int)counter.size() - 1; i >= 0; --i)
+            {
+                if(counter[i].second<heapmin)
+                {
+                    heapmin = counter[i].second;
+                    minidx = i;
+                }
             }
         }
-        Insertass((tmp.first).c_str(),byteslen,tmp.second);
+        if(!find)
+        {
+            assitem tmp =counter[minidx];
+            counter[minidx].first = s;
+            counter[minidx].second = freq;
+            heapmin =  counter[minidx].second;
+            for (int i = (int)counter.size() - 1; i >= 0; --i)
+            {
+                if(counter[i].second<heapmin)
+                {
+                    heapmin = counter[i].second;
+                    minidx = i;
+                }
+            }
+            Insertass((tmp.first).c_str(),byteslen,tmp.second);
+        }
     }
     std::vector<std::pair<std::string, int> > TopK(const int k) {
         return std::vector<std::pair<std::string, int> >(counter.begin(), counter.begin() + k);
