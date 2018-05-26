@@ -301,7 +301,7 @@ def topk_analyzer(env):
             print(sketch_name[i]+":"+str(res[sketch_name[i]][k]['p'])+"\n")
             '''
             k = k * 2
-            if k== 1024*2:
+            if k== 128*2:
                 break
     pickleName ="PickleTopk_"+env['dataset']\
                                  +"_hashnum"+env['hashnum']+"_bitPerCounter24"+\
