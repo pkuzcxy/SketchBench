@@ -238,8 +238,7 @@ def usage(argv):
 
 
 def topk_analyzer(env):
-    sketch_name = ['asketch','cmmsketch','cmmcusketch','cmsketch','csketch','csmsketch','cusketch','Lcusketch','sbfsketch'\
-                   ,'spaceSaving']
+    sketch_name = ['spaceSaving','ass']
     names, trueData = read_file(os.path.join(env['path'], 'top5000_exactRank_' + env['dataset'] + '.txt'))
     i  = 1
     trueRank ={}
@@ -264,6 +263,9 @@ def topk_analyzer(env):
                                 "_bitPerCounter24"+\
                                 "_counterPerArray"+str(int(env['counternum'])*int(env['hashnum']))
             elif sketch_name[i]=='spaceSaving':
+                topk_file_name =  "top"+str(k)+"_result_"+sketch_name[i]+\
+                                "_"+env['dataset']
+            elif sketch_name[i]=='ass':
                 topk_file_name =  "top"+str(k)+"_result_"+sketch_name[i]+\
                                 "_"+env['dataset']
             else:
