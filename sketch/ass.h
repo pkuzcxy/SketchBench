@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include<iostream>
 typedef std::pair<std::string, int> assitem;
 template<class Hash, class Unit>
 class ass: public SketchBase<Hash, Unit> {
@@ -47,7 +48,10 @@ public:
             return;
         }
         else
+        {
             Insertass(str,len,1);
+           
+        }
     }
     void Insertass(const char* str,int len,int freq)
     {
@@ -62,9 +66,9 @@ public:
                 zhou[i].second += freq;
                 if(zhou[i].second>heapmin)
                 {
-                    
-                    InsertSpaveSaving(str,zhou[i].second);
+                    int tmp=zhou[i].second;
                     zhou.erase(zhou.begin()+i);
+                    InsertSpaveSaving(str,tmp);
                 }
                 find = true;
                 return ;
@@ -105,7 +109,6 @@ public:
     void InsertSpaveSaving(std::string s,int freq)
     {
         assitem tmp =counter[minidx];
-        Insertass((tmp.first).c_str(),byteslen,tmp.second);
         counter[minidx].first = s;
         counter[minidx].second = freq;
         heapmin = freq;
@@ -117,6 +120,7 @@ public:
                 minidx = i;
             }
         }
+        Insertass((tmp.first).c_str(),byteslen,tmp.second);
     }
     std::vector<std::pair<std::string, int> > TopK(const int k) {
         return std::vector<std::pair<std::string, int> >(counter.begin(), counter.begin() + k);
