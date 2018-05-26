@@ -12,7 +12,7 @@
 #include "../sketch/SpectralBloomFilter.h"
 #include "../dataset/StreamData.h"
 #include "../hash/BOBHash.h"
-
+#include "../sketch/ass.h"
 #include <unordered_map>
 #include <algorithm>
 #include <map>
@@ -177,6 +177,44 @@ void topk_test_spacesaving(vector<string> & v,const int bytesPerStr,int k)
     vector<item>  myheap;
     string sketch_name = "spaceSaving";
     SpaceSaving ss(2*k);
+    /*topk test insertion*/
+    clock_t start,finish;
+    start = clock();
+    for(auto iter = v.begin();iter != v.end();iter++)
+    {
+        ss.Insert((*iter).c_str(),bytesPerStr);
+    }
+    
+    finish = clock();
+    ofstream throughput_file;
+    string throughput_file_name = "top"+to_string(k)+"_throughput_"+sketch_name+\
+    +"_"+dataset;
+    
+    throughput_file.open("./result/"+throughput_file_name+".txt");
+    throughput_file << "TotalNum\tTime" << endl;
+    throughput_file << v.size() << "\t";
+    throughput_file << double(finish-start)/CLOCKS_PER_SEC << "\t";
+    throughput_file.close();
+    
+    /*accuracy test*/
+    ofstream topk_file;
+    string topk_file_name =  "top"+to_string(k)+"_result_"+sketch_name+\
+    +"_"+dataset;
+    
+    topk_file.open("./result/"+topk_file_name+".txt");
+    topk_file<<"top"+to_string(k)<<endl;
+    
+    
+    vector<std::pair<std::string, int> > res = ss.TopK(k);
+    for(int i = 0;i<k;++i)
+        topk_file << item2idx[res[i].first] <<"\t"<< res[i].second<< endl;
+    topk_file.close();
+}
+void ass_test_spacesaving(vector<string> & v,const int bytesPerStr,int k)
+{
+    vector<item>  myheap;
+    string sketch_name = "ass";
+    ass<BOBHash,int> ss(4,1,1,2*k);
     /*topk test insertion*/
     clock_t start,finish;
     start = clock();
@@ -521,8 +559,11 @@ int main(int argc, char *argv[]) {
 //                cout<<"freq"<<processidx++<<endl;
 //            }
 //    }
-
-
+for(int i = 8;i<=1024;i<<=1)
+{
+    //topk_test_spacesaving(v,bytesPerStr,i);
+    ass_test_spacesaving(v,bytesPerStr,i);
+}
     //  topk_test
 //    if(task ==2)
 //    {
@@ -563,50 +604,50 @@ int main(int argc, char *argv[]) {
 //
 
     
-//   heavychange_test
-    generateTrueHeavyChange(trueRes,v,100000,0.0005);
-    if(task ==3)
-    {
-        processidx = 1;
-        for(p_hashnum = 3;p_hashnum<=5;++p_hashnum)
-        {
-            for (double mem= 2*OneMegaBit; mem <= 4*OneMegaBit; mem+=OneMegaBit)
-            {
-                p_counternum = mem/p_bitprecounter/p_hashnum/30;
-                CmSketch<BOBHash, int> cm1(p_hashnum, p_bitprecounter, p_counternum);
-                CsmSketch<BOBHash, int> csm1(p_hashnum, p_bitprecounter, p_counternum);
-                CSketch<BOBHash, int> cs1(p_hashnum, p_bitprecounter, p_counternum);
-                CuSketch<BOBHash, int> cu1(p_hashnum, p_bitprecounter, p_counternum);
-                /*ASketch_parameter: elephant item size,max num of items in filter */
-                ASketch<BOBHash,int> as1(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
-                CountMeanMinSketch<BOBHash, int> cmm1(p_hashnum, p_bitprecounter, p_counternum);
-                CMMCUSketch<BOBHash,int> cmmcu1(p_hashnum,p_bitprecounter,p_counternum);
-                LossyCUSketch<BOBHash,int> LossyCU1(p_hashnum,p_bitprecounter,p_counternum);
-                SpectralBloomFilterSketch<BOBHash,int> sbf1(p_hashnum,p_bitprecounter,p_counternum);
-                
-                CmSketch<BOBHash, int> cm2(p_hashnum, p_bitprecounter, p_counternum);
-                CsmSketch<BOBHash, int> csm2(p_hashnum, p_bitprecounter, p_counternum);
-                CSketch<BOBHash, int> cs2(p_hashnum, p_bitprecounter, p_counternum);
-                CuSketch<BOBHash, int> cu2(p_hashnum, p_bitprecounter, p_counternum);
-                /*ASketch_parameter: elephant item size,max num of items in filter */
-                ASketch<BOBHash,int> as2(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
-                CountMeanMinSketch<BOBHash, int> cmm2(p_hashnum, p_bitprecounter, p_counternum);
-                CMMCUSketch<BOBHash,int> cmmcu2(p_hashnum,p_bitprecounter,p_counternum);
-                LossyCUSketch<BOBHash,int> LossyCU2(p_hashnum,p_bitprecounter,p_counternum);
-                SpectralBloomFilterSketch<BOBHash,int> sbf2(p_hashnum,p_bitprecounter,p_counternum);
-                
-                heavyChangeTest(cm1,cm2,v,bytesPerStr);
-                heavyChangeTest(csm1,csm2,v,bytesPerStr);
-                heavyChangeTest(cs1,cs2,v,bytesPerStr);
-                heavyChangeTest(cu1,cu2,v,bytesPerStr);
-                heavyChangeTest(as1,as2,v,bytesPerStr);
-                heavyChangeTest(cmm1,cmm2,v,bytesPerStr);
-                heavyChangeTest(cmmcu1,cmmcu2,v,bytesPerStr);
-                heavyChangeTest(LossyCU1,LossyCU2,v,bytesPerStr);
-                heavyChangeTest(sbf1,sbf2,v,bytesPerStr);
-                cout<<"hc"<<processidx++<<endl;
-            }
-        }
-    }
+////   heavychange_test
+//    generateTrueHeavyChange(trueRes,v,100000,0.0005);
+//    if(task ==3)
+//    {
+//        processidx = 1;
+//        for(p_hashnum = 3;p_hashnum<=5;++p_hashnum)
+//        {
+//            for (double mem= 2*OneMegaBit; mem <= 4*OneMegaBit; mem+=OneMegaBit)
+//            {
+//                p_counternum = mem/p_bitprecounter/p_hashnum/30;
+//                CmSketch<BOBHash, int> cm1(p_hashnum, p_bitprecounter, p_counternum);
+//                CsmSketch<BOBHash, int> csm1(p_hashnum, p_bitprecounter, p_counternum);
+//                CSketch<BOBHash, int> cs1(p_hashnum, p_bitprecounter, p_counternum);
+//                CuSketch<BOBHash, int> cu1(p_hashnum, p_bitprecounter, p_counternum);
+//                /*ASketch_parameter: elephant item size,max num of items in filter */
+//                ASketch<BOBHash,int> as1(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
+//                CountMeanMinSketch<BOBHash, int> cmm1(p_hashnum, p_bitprecounter, p_counternum);
+//                CMMCUSketch<BOBHash,int> cmmcu1(p_hashnum,p_bitprecounter,p_counternum);
+//                LossyCUSketch<BOBHash,int> LossyCU1(p_hashnum,p_bitprecounter,p_counternum);
+//                SpectralBloomFilterSketch<BOBHash,int> sbf1(p_hashnum,p_bitprecounter,p_counternum);
+//                
+//                CmSketch<BOBHash, int> cm2(p_hashnum, p_bitprecounter, p_counternum);
+//                CsmSketch<BOBHash, int> csm2(p_hashnum, p_bitprecounter, p_counternum);
+//                CSketch<BOBHash, int> cs2(p_hashnum, p_bitprecounter, p_counternum);
+//                CuSketch<BOBHash, int> cu2(p_hashnum, p_bitprecounter, p_counternum);
+//                /*ASketch_parameter: elephant item size,max num of items in filter */
+//                ASketch<BOBHash,int> as2(p_hashnum, p_bitprecounter, p_counternum,bytesPerStr,128);
+//                CountMeanMinSketch<BOBHash, int> cmm2(p_hashnum, p_bitprecounter, p_counternum);
+//                CMMCUSketch<BOBHash,int> cmmcu2(p_hashnum,p_bitprecounter,p_counternum);
+//                LossyCUSketch<BOBHash,int> LossyCU2(p_hashnum,p_bitprecounter,p_counternum);
+//                SpectralBloomFilterSketch<BOBHash,int> sbf2(p_hashnum,p_bitprecounter,p_counternum);
+//                
+//                heavyChangeTest(cm1,cm2,v,bytesPerStr);
+//                heavyChangeTest(csm1,csm2,v,bytesPerStr);
+//                heavyChangeTest(cs1,cs2,v,bytesPerStr);
+//                heavyChangeTest(cu1,cu2,v,bytesPerStr);
+//                heavyChangeTest(as1,as2,v,bytesPerStr);
+//                heavyChangeTest(cmm1,cmm2,v,bytesPerStr);
+//                heavyChangeTest(cmmcu1,cmmcu2,v,bytesPerStr);
+//                heavyChangeTest(LossyCU1,LossyCU2,v,bytesPerStr);
+//                heavyChangeTest(sbf1,sbf2,v,bytesPerStr);
+//                cout<<"hc"<<processidx++<<endl;
+//            }
+//        }
+//    }
     return 0;
 }
