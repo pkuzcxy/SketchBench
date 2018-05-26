@@ -47,8 +47,8 @@ public:
                 data[i][j] = 0;
             }
         }
-        acc  =0 ;
-        ave = 0;
+        acc  = 0 ;
+        ave  = 0;
     }
 };
 

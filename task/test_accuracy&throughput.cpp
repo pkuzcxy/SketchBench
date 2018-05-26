@@ -462,24 +462,24 @@ int main(int argc, char *argv[]) {
     }
     
     
-    
-    vector<item> itemRank;
-    for (auto it = item2freq.begin(); it != item2freq.end(); it++)
-    {
-        item newitem;
-        newitem.freq =it->second;
-        newitem.s= it->first;
-        itemRank.push_back(newitem);
-    }
-        
-    sort(itemRank.begin(), itemRank.end(),comp);
-    ofstream topk_exactRank_file;
-    int k =5000;
-    topk_exactRank_file.open("./result/top"+to_string(k)+"_exactRank_"+dataset+".txt");
-    topk_exactRank_file<<"id\tfreq"<<endl;
-    for(int i=0;i<k;i++)
-        topk_exactRank_file<<item2idx[itemRank[i].s]<<"\t"<<itemRank[i].freq<<endl;
-    topk_exactRank_file.close();
+    //topk_rank
+//    vector<item> itemRank;
+//    for (auto it = item2freq.begin(); it != item2freq.end(); it++)
+//    {
+//        item newitem;
+//        newitem.freq =it->second;
+//        newitem.s= it->first;
+//        itemRank.push_back(newitem);
+//    }
+//        
+//    sort(itemRank.begin(), itemRank.end(),comp);
+//    ofstream topk_exactRank_file;
+//    int k =5000;
+//    topk_exactRank_file.open("./result/top"+to_string(k)+"_exactRank_"+dataset+".txt");
+//    topk_exactRank_file<<"id\tfreq"<<endl;
+//    for(int i=0;i<k;i++)
+//        topk_exactRank_file<<item2idx[itemRank[i].s]<<"\t"<<itemRank[i].freq<<endl;
+//    topk_exactRank_file.close();
 
     
 
@@ -567,7 +567,7 @@ int main(int argc, char *argv[]) {
         {
             for (double mem= 2*OneMegaBit; mem <= 4*OneMegaBit; mem+=OneMegaBit)
             {
-                p_counternum = mem/p_bitprecounter/p_hashnum/60;
+                p_counternum = mem/p_bitprecounter/p_hashnum/15;
                 CmSketch<BOBHash, int> cm1(p_hashnum, p_bitprecounter, p_counternum);
                 CsmSketch<BOBHash, int> csm1(p_hashnum, p_bitprecounter, p_counternum);
                 CSketch<BOBHash, int> cs1(p_hashnum, p_bitprecounter, p_counternum);
@@ -600,9 +600,6 @@ int main(int argc, char *argv[]) {
                 heavyChangeTest(LossyCU1,LossyCU2,v,bytesPerStr);
                 heavyChangeTest(sbf1,sbf2,v,bytesPerStr);
                 cout<<"hc"<<processidx++<<endl;
-                
-                
-                
             }
         }
     }

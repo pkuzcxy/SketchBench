@@ -57,6 +57,17 @@ public:
             res = res<0?0:res;
         return res;
     }
+    void clear()
+    {
+        for (int i = 0; i < hash_num; ++i) {
+            for (int j = 0; j < counter_per_array; ++j) {
+                data[i][j] = 0;
+            }
+        }
+        delete [] num_element;
+        num_element = new int[hash_num];
+        memset(num_element, 0, sizeof(int)*hash_num);
+    }
 };
 
 #endif
