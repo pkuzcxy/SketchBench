@@ -234,7 +234,8 @@ def usage(argv):
 
 
 def topk_analyzer(env):
-    sketch_name = ['asketch','cmmsketch','cmmcusketch','cmsketch','csketch','csmsketch','cusketch','Lcusketch','sbfsketch']
+    sketch_name = ['asketch','cmmsketch','cmmcusketch','cmsketch','csketch','csmsketch','cusketch','Lcusketch','sbfsketch'\
+                   ,'spaceSaving']
     names, trueData = read_file(os.path.join(env['path'], 'top5000_exactRank_' + env['dataset'] + '.txt'))
     i  = 1
     trueRank ={}
@@ -253,17 +254,20 @@ def topk_analyzer(env):
             re =0.0
             ae = 0.0
             if sketch_name[i]!='sbfsketch':
-                topk_file_name = "top"+str(k)+"_result_"+sketch_name[i]+\
-                                "_"+env['dataset']+\
-                                "_hashnum"+env['hashnum']+ \
-                                "_bitPerCounter24"+ \
-                                "_counterPerArray"+ env['counternum']
-            else:
                 topk_file_name ="top"+str(k)+"_result_"+sketch_name[i]+\
                                 "_"+env['dataset']+\
                                 "_hashnum"+env['hashnum']+\
                                 "_bitPerCounter24"+\
                                 "_counterPerArray"+str(int(env['counternum'])*int(env['hashnum']))
+            elif sketch_name[i]=='spaceSaving':
+                topk_file_name =  "top"+str(k)+"_result_"+sketch_name[i]+\
+                                "_"+env['dataset']
+            else:
+                topk_file_name = "top"+str(k)+"_result_"+sketch_name[i]+\
+                                "_"+env['dataset']+\
+                                "_hashnum"+env['hashnum']+ \
+                                "_bitPerCounter24"+ \
+                                "_counterPerArray"+ env['counternum']
             name, data = read_file(os.path.join(env['path'], topk_file_name+ '.txt'))
             j = 1
             for line in data:
@@ -297,8 +301,7 @@ def topk_analyzer(env):
 
 
 def heavyChange_analyzer(env):
-    sketch_name = ['asketch','cmmsketch','cmmcusketch','cmsketch','csketch','csmsketch','cusketch','Lcusketch','sbfsketch'\
-                   ,'spaceSaving']
+    sketch_name = ['asketch','cmmsketch','cmmcusketch','cmsketch','csketch','csmsketch','cusketch','Lcusketch','sbfsketch']
     res =dict()
     for i in range(len(sketch_name)):
         res[sketch_name[i]]  = dict()
@@ -308,8 +311,6 @@ def heavyChange_analyzer(env):
             heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']\
                                  +"_hashnum"+env['hashnum']+"_bitPerCounter24"+\
                                  "_counterPerArray"+str(int(env['counternum'])*int(env['hashnum']))
-        elif sketch_name[i]=='spaceSaving':
-            heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']
         else:
              heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']\
                                  +"_hashnum"+env['hashnum']+"_bitPerCounter24"+\
