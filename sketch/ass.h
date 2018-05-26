@@ -1,7 +1,12 @@
 #include <string>
 #include <vector>
 #include<iostream>
+#include<algorithm>
 typedef std::pair<std::string, int> assitem;
+bool compass(assitem a,assitem b)
+{
+    return a.second >b.second;
+}
 template<class Hash, class Unit>
 class ass: public SketchBase<Hash, Unit> {
 private:
@@ -145,6 +150,7 @@ public:
         }
     }
     std::vector<std::pair<std::string, int> > TopK(const int k) {
+        sort(counter.begin(),counter.end(),compass);
         return std::vector<std::pair<std::string, int> >(counter.begin(), counter.begin() + k);
     }
     Unit Query(const char *str, const int len) {
