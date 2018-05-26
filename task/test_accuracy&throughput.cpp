@@ -443,7 +443,7 @@ void heavyChangeTest(SketchBase<BOBHash,int> &sketch1,SketchBase<BOBHash,int> &s
 {
     
     vector<vector<string> > estiRes;
-    generateEstimateHeavyChange(estiRes,v,sketch1,sketch2,bytesPerStr,100000,0.0005);
+    generateEstimateHeavyChange(estiRes,v,sketch1,sketch2,bytesPerStr,100000,0.0001);
     heavyChangeResult(trueRes,estiRes,sketch1);
 }
 int main(int argc, char *argv[]) {
