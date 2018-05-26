@@ -304,16 +304,16 @@ def heavyChange_analyzer(env):
         res[sketch_name[i]]  = dict()
         recall = 0.0
         precision = 0.0
-        if sketch_name[i]!='sbfsketch':
-            heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']\
-                                 +"_hashnum"+env['hashnum']+"_bitPerCounter24"+\
-                                 "_counterPerArray"+env['counternum']
-        elif sketch_name[i]!='sbfsketch':
-            heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']
-        else:
+        if sketch_name[i]=='sbfsketch':
             heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']\
                                  +"_hashnum"+env['hashnum']+"_bitPerCounter24"+\
                                  "_counterPerArray"+str(int(env['counternum'])*int(env['hashnum']))
+        elif sketch_name[i]=='spaceSaving':
+            heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']
+        else:
+             heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']\
+                                 +"_hashnum"+env['hashnum']+"_bitPerCounter24"+\
+                                 "_counterPerArray"+env['counternum']
         names, data = read_file(os.path.join(env['path'], heavyChange_file_name+ '.txt'))
         for line in data:
             recall += float(line[names.index('recall')])
@@ -339,7 +339,7 @@ def parse_commandline(type,env):
         heavyChange_analyzer(env)
 def main(argv):
     '''
-    -hc -d webdocs_form00.dat -hashnum 3 -counternum 116508 -p ./
+    -t -d webdocs_form00.dat -hashnum 3 -counternum 116508 -p ./
     '''
     i = 1
     type = "" #task_type:topk\frequency\heacyChange
