@@ -87,11 +87,15 @@ def read_file(name):
         names = res[0]
         data = []
         for line in res[1:]:
-            data.append([eval(n) for n in line])
+            data.append([eval(myeval(n)) for n in line])
         return names, data
     return []
 #read file ####
-
+def myeval(n):
+    if n=='-nan' or n=='nan':
+        return "0"
+    else:
+        return n
 
 #environment helpers ####
 def to_int(tag):
@@ -342,7 +346,7 @@ def parse_commandline(type,env):
         heavyChange_analyzer(env)
 def main(argv):
     '''
-    -t -d webdocs_form00.dat -hashnum 3 -counternum 116508 -p ./
+    -hc -d kosarak.dat -hashnum 3 -counternum 3883 -p ./result
     '''
     i = 1
     type = "" #task_type:topk\frequency\heacyChange
