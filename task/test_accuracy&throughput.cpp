@@ -561,7 +561,7 @@ int main(int argc, char *argv[]) {
 //    }
 for(int i = 8;i<=1024;i<<=1)
 {
-    //topk_test_spacesaving(v,bytesPerStr,i);
+    topk_test_spacesaving(v,bytesPerStr,i);
     ass_test_spacesaving(v,bytesPerStr,i);
 }
     //  topk_test
