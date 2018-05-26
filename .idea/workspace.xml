@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aa2c8849-11a6-4ef6-95bd-0216d9ec7787" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res_v2.py" afterPath="$PROJECT_DIR$/res_v2.py" />
-    </list>
+    <list default="true" id="aa2c8849-11a6-4ef6-95bd-0216d9ec7787" name="Default" comment="" />
     <ignored path="SketchBench.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,7 +34,7 @@
       <file leaf-file-name="res_v2.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/res_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.55518943">
+            <state vertical-scroll-proportion="-0.23558484">
               <caret line="287" column="38" selection-start-line="287" selection-start-column="38" selection-end-line="287" selection-end-column="38" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -810,7 +808,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/res_v2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.55518943">
+        <state vertical-scroll-proportion="-0.23558484">
           <caret line="287" column="38" selection-start-line="287" selection-start-column="38" selection-end-line="287" selection-end-column="38" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />

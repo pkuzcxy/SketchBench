@@ -37,7 +37,7 @@ public:
         std::sort(queArr, queArr + hash_num);
         int res =(queArr[hash_num>>1] + queArr[(hash_num-1)>>1]) >> 1;
         res = res>0?res:0;
-        unsigned int upbound = (1<<(bit_per_counter-1)) -1;
+        int upbound = (1<<(bit_per_counter-1)) -1;
         res = res>upbound ? upbound: res;
         return res;
     }

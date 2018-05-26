@@ -31,7 +31,7 @@ public:
             Unit t = data[i][hash[i].Run(str, len) % counter_per_array];
             res = res < t ? res : t;
         }
-        unsigned int upbound = (1<<bit_per_counter) -1;
+        int upbound = (1<<bit_per_counter) -1;
         res = res>upbound ? upbound: res;
         return res;
     }
