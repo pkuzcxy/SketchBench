@@ -285,7 +285,7 @@ def topk_analyzer(env):
             print(sketch_name[i]+"are:"+str(res[sketch_name[i]][k]['are'])+"\n")
             print(sketch_name[i]+"aae:"+str(res[sketch_name[i]][k]['aae'])+"\n")
             print(sketch_name[i]+":"+str(res[sketch_name[i]][k]['recall'])+"\n")
-            if recall!=0:
+            if recall!=0 and recall!=1:
                 res[sketch_name[i]][k]['p'] = 1- 6*rank2/recall/(recall-1)/(recall+1)
             else:
                 res[sketch_name[i]][k]['p'] = 0
