@@ -297,7 +297,8 @@ def topk_analyzer(env):
 
 
 def heavyChange_analyzer(env):
-    sketch_name = ['asketch','cmmsketch','cmmcusketch','cmsketch','csketch','csmsketch','cusketch','Lcusketch','sbfsketch']
+    sketch_name = ['asketch','cmmsketch','cmmcusketch','cmsketch','csketch','csmsketch','cusketch','Lcusketch','sbfsketch'\
+                   ,'spaceSaving']
     res =dict()
     for i in range(len(sketch_name)):
         res[sketch_name[i]]  = dict()
@@ -307,6 +308,8 @@ def heavyChange_analyzer(env):
             heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']\
                                  +"_hashnum"+env['hashnum']+"_bitPerCounter24"+\
                                  "_counterPerArray"+env['counternum']
+        elif sketch_name[i]!='sbfsketch':
+            heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']
         else:
             heavyChange_file_name =  "heavyChange_"+sketch_name[i]+"_"+env['dataset']\
                                  +"_hashnum"+env['hashnum']+"_bitPerCounter24"+\

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aa2c8849-11a6-4ef6-95bd-0216d9ec7787" name="Default" comment="" />
+    <list default="true" id="aa2c8849-11a6-4ef6-95bd-0216d9ec7787" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res_v2.py" afterPath="$PROJECT_DIR$/res_v2.py" />
+    </list>
     <ignored path="SketchBench.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,8 +37,8 @@
       <file leaf-file-name="res_v2.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/res_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.35749587">
-              <caret line="289" column="25" selection-start-line="289" selection-start-column="25" selection-end-line="289" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.6540362">
+              <caret line="311" column="85" selection-start-line="311" selection-start-column="85" selection-end-line="311" selection-end-column="85" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -47,7 +50,7 @@
         <entry file="file://$PROJECT_DIR$/sketch/Count-Mean-MinSketch.h">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="37" />
+              <caret line="32" column="5" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -67,7 +70,7 @@
         <entry file="file://$PROJECT_DIR$/task/test_accuracy&amp;throughput.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="544" column="29" selection-start-line="544" selection-start-column="29" selection-end-line="544" selection-end-column="29" />
+              <caret line="542" column="29" selection-start-line="542" selection-start-column="29" selection-end-line="542" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -87,7 +90,7 @@
         <entry file="file://$PROJECT_DIR$/sketch/LossyCUSketch.h">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="26" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="41" />
+              <caret line="40" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -117,7 +120,7 @@
         <entry file="file://$PROJECT_DIR$/sketch/CsmSketch.h">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="37" />
+              <caret line="34" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -737,7 +740,7 @@
     <entry file="file://$PROJECT_DIR$/sketch/CsmSketch.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="37" />
+          <caret line="34" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="37" />
           <folding />
         </state>
       </provider>
@@ -753,7 +756,7 @@
     <entry file="file://$PROJECT_DIR$/sketch/LossyCUSketch.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="41" />
+          <caret line="40" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="41" />
           <folding />
         </state>
       </provider>
@@ -785,7 +788,7 @@
     <entry file="file://$PROJECT_DIR$/sketch/Count-Mean-MinSketch.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="37" />
+          <caret line="32" column="5" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="37" />
           <folding />
         </state>
       </provider>
@@ -793,7 +796,7 @@
     <entry file="file://$PROJECT_DIR$/task/test_accuracy&amp;throughput.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="544" column="29" selection-start-line="544" selection-start-column="29" selection-end-line="544" selection-end-column="29" />
+          <caret line="542" column="29" selection-start-line="542" selection-start-column="29" selection-end-line="542" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -808,8 +811,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/res_v2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35749587">
-          <caret line="289" column="25" selection-start-line="289" selection-start-column="25" selection-end-line="289" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.6540362">
+          <caret line="311" column="85" selection-start-line="311" selection-start-column="85" selection-end-line="311" selection-end-column="85" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
