@@ -487,9 +487,9 @@ void heavyChangeTest(SketchBase<BOBHash,int> &sketch1,SketchBase<BOBHash,int> &s
 int main(int argc, char *argv[]) {
     
     
-    //int task = atoi(argv[2]);
+    int task = atoi(argv[2]);
     // Data Source
-    //dataset = argv[1];
+    dataset = argv[1];
     const int bytesPerStr = 4;
     StreamData dat(argv[1], bytesPerStr);
     unordered_map<string, int> item2freq;
