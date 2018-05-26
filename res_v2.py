@@ -93,7 +93,7 @@ def read_file(name):
 #read file ####
 def myeval(n):
     if n=='-nan' or n=='nan':
-        return "0"
+        return "1"
     else:
         return n
 
